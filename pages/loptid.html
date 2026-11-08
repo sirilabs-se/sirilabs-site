@@ -57,7 +57,7 @@ input:disabled{opacity:.5}
 
 /* Top bar */
 .topbar{background:var(--surface);border-bottom:1px solid var(--line)}
-.topbar-in{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+.topbar-in{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px}
 .brand{display:flex;align-items:center;gap:8px;flex:none}
 .brand-name{font-family:'Fraunces',serif;font-size:22px;font-weight:600}
 .views{display:flex;padding:3px;border-radius:10px;background:var(--surface-2);flex:none}
@@ -89,7 +89,10 @@ main{max-width:1280px;margin:0 auto;padding:28px 20px 48px;display:flex;flex-dir
 .seg{display:flex;padding:3px;border-radius:10px;background:var(--surface-2)}
 .seg button{border:0;height:36px;padding:0 14px;border-radius:7px;background:transparent;color:var(--ink-2);font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
 .seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
-.seg .short{display:none}
+.short{display:none}
+.head .ctrl{position:relative;z-index:20}
+.navbtn{width:40px;height:40px;display:grid;place-items:center;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;padding:0}
+.navbtn:hover{border-color:var(--ink-3)}
 .calnav{display:flex;align-items:center;gap:6px}
 .calnav b{min-width:120px;text-align:center}
 .calnav .icon-btn{width:36px;height:36px}
@@ -188,7 +191,36 @@ main{max-width:1280px;margin:0 auto;padding:28px 20px 48px;display:flex;flex-dir
 .facts dd{margin:2px 0 0;font-weight:600}
 .facts dd.w{color:var(--warn)}.facts dd.d{color:var(--danger)}
 .dnotes{font-size:14px;color:var(--ink-2)}
-.detbtns{display:flex;gap:8px}
+.detbtns{display:flex;justify-content:center}
+.detbtns>div{display:flex;gap:8px;width:min(100%,456px)}
+.detbtns .btn{flex:1 1 0;min-width:0;height:42px;padding:0 8px;font-size:14px}
+.btn.soft{background:var(--accent-2);border-color:color-mix(in srgb,var(--accent) 35%,transparent);color:var(--accent)}
+.btn.neutral{background:var(--surface-2);color:var(--ink)}
+
+/* Table (desktop grid + phone cards) */
+.tcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.tgrid{display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1.3fr) minmax(0,1.1fr) minmax(0,1.1fr) minmax(0,1.1fr) minmax(0,1fr) minmax(0,.9fr);column-gap:16px;align-items:center;padding:0 16px}
+.thead{padding:12px 16px;background:var(--surface-2);border-bottom:1px solid var(--line);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2)}
+.trow{border-bottom:1px solid var(--line)}
+.trow:last-child{border-bottom:0}
+.trow.open{background:var(--row-open)}
+.trowbtn{display:block;width:100%;padding:0;border:0;background:transparent;text-align:left;cursor:pointer;font-size:14px}
+.trowbtn:hover .tname .ell,.trowbtn:hover .mname b .ell{text-decoration:underline}
+.trowbtn .tgrid{min-height:48px}
+.ell{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.tname{display:flex;align-items:center;gap:6px;font-weight:600;min-width:0}
+.tname svg,.mname svg{flex:none;color:var(--ink-2)}
+.mute-t{color:var(--ink-2)}.warn-t{color:var(--warn)}
+.mcard{display:none}
+.mtop{display:flex;align-items:flex-start;gap:10px}
+.mtop .dot{margin-top:6px}
+.mname{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.mname b{display:flex;align-items:center;gap:6px;min-width:0;font-size:15px}
+.mname small{color:var(--ink-2)}
+.mfacts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;margin-left:20px;padding:10px 12px;border-radius:10px;background:var(--bg)}
+.mfacts>span{display:flex;flex-direction:column;min-width:0}
+.mfacts small{font-size:11px;font-weight:600;color:var(--ink-2)}
+.mfacts b{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .legend{display:flex;flex-wrap:wrap;gap:10px 20px;font-size:12px;color:var(--ink-2)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .lg{display:inline-block;width:22px;height:10px;border-radius:5px}
@@ -223,16 +255,33 @@ main{max-width:1280px;margin:0 auto;padding:28px 20px 48px;display:flex;flex-dir
 .sees-tbl td:first-child{font-weight:600}
 
 /* Calendar */
-.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
-.dow{padding:8px 10px;font-size:11px;font-weight:600;color:var(--ink-2);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--line);background:var(--surface-2)}
-.day{min-height:106px;padding:6px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:3px;min-width:0}
+.calwrap{display:flex;flex-direction:column;gap:16px}
+.calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.dow{padding:8px 10px;font-size:11px;font-weight:700;color:var(--ink-2);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.day{min-width:0;min-height:108px;display:flex;flex-direction:column;align-items:stretch;gap:3px;padding:6px;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface);text-align:left;cursor:pointer}
 .day:nth-child(7n){border-right:0}
 .day.out{background:var(--bg)}
+.day:hover{background:var(--surface-2)}
+.day[aria-pressed="true"]{background:var(--accent-2);box-shadow:inset 0 0 0 2px var(--accent)}
+.dn{width:24px;height:24px;display:grid;place-items:center;border-radius:50%;font-size:12px;font-weight:600;color:var(--ink-2)}
 .day.out .dn{color:var(--ink-3)}
-.dn{font-size:12px;font-weight:600;color:var(--ink-2);width:22px;height:22px;display:grid;place-items:center;border-radius:50%}
-.is-today .dn{background:var(--danger);color:var(--on-danger)}
-.ev{border:0;text-align:left;font-size:11px;line-height:1.3;padding:3px 6px;border-radius:5px;background:color-mix(in srgb,var(--c) 15%,var(--surface));border-left:3px solid var(--c);cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}
-.ev.notice{border-left-color:var(--warn);background:var(--warn-bg)}
+.day.today .dn{background:var(--danger);color:var(--on-danger)}
+.chip{display:block;height:20px;line-height:20px;padding:0 6px;border-radius:4px;border-left:3px solid var(--c);background:color-mix(in srgb,var(--c) 15%,var(--surface));font-size:11px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.chip.notice{border-left-color:var(--warn);background:var(--warn-bg)}
+.more{font-size:11px;font-weight:600;color:var(--ink-2)}
+.ag-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.ag-head h2{font-size:20px}
+.ag-head small{display:block;color:var(--ink-2)}
+.ag-day{display:flex;flex-wrap:wrap;gap:4px 16px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.ag-day:last-child{border-bottom:0}
+.ag-date{flex:0 0 120px;display:flex;flex-direction:column;padding-top:6px}
+.ag-date small{color:var(--ink-2)}
+.ag-items{flex:1 1 260px;min-width:0;display:flex;flex-direction:column}
+.ag-item{width:100%;min-height:44px;display:flex;align-items:center;gap:10px;padding:4px 0;border:0;background:transparent;text-align:left;cursor:pointer}
+.ag-item .txt{flex:1;min-width:0;display:flex;flex-direction:column}
+.ag-item .txt small{color:var(--ink-2)}
+.ag-item:hover .txt b{text-decoration:underline}
+.ag-empty{padding:24px 16px;color:var(--ink-2)}
 
 /* Drawer */
 .scrim{position:fixed;inset:0;background:rgba(15,17,20,.32);z-index:35}
@@ -345,9 +394,15 @@ code{font-size:13px;background:var(--surface-2);padding:1px 5px;border-radius:4p
   .head .ctrl{margin-bottom:0;align-self:center}
   .head .summary{font-size:13px}
   .seg button{padding:0 9px}
-  .seg .long{display:none}.seg .short{display:inline}
+  .long{display:none}.short{display:inline}
+  .calnav b{min-width:64px!important}
+  .thead,.trowbtn .tgrid{display:none}
+  .mcard{display:flex;flex-direction:column;gap:10px;padding:14px 16px}
+  .chip{height:5px;padding:0;font-size:0}
+  .more{display:none}
+  .detbtns>div{width:100%}
   .calnav b{min-width:0;font-size:14px}
-  .detbtns .btn{padding:0 10px;font-size:14px}
+  .detbtns .btn{font-size:13px}
   .row2{grid-template-columns:1fr}
   .day{min-height:70px;padding:3px}
   .ev{font-size:10px;padding:2px 4px}
@@ -392,9 +447,9 @@ code{font-size:13px;background:var(--surface-2);padding:1px 5px;border-radius:4p
 
 <main>
   <section class="print-head"><h1>Löptid</h1><p id="printDate"></p></section>
-  <section class="head" id="head"></section>
   <section class="nextup" id="nextup" aria-labelledby="nextupTitle"></section>
   <section class="filters" id="filters" aria-label="Filters"></section>
+  <section class="head" id="head"></section>
   <section id="view"></section>
   <p class="foot">Interactive mock-up. Your changes are saved in this browser only. Sign-in, payments, sync and reminders are simulated.</p>
 </main>
@@ -487,7 +542,7 @@ function load(){try{const r=localStorage.getItem(STORE_KEY);if(r){const d=JSON.p
 function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(state))}catch(e){}}
 
 let state=load()||sample();
-const ui={view:'timeline',filter:'all',q:'',span:365,cal:new Date(T.getFullYear(),T.getMonth(),1),sort:{k:'end',d:1},hidden:new Set(),collapsed:new Set(),open:null,menu:null,nextAll:false,adding:false,newName:''};
+const ui={view:'timeline',filter:'all',q:'',span:365,cal:new Date(T.getFullYear(),T.getMonth(),1),sort:'end',calSel:null,hidden:new Set(),collapsed:new Set(),open:null,menu:null,nextAll:false,adding:false,newName:''};
 let draft=null,pendingAfter=null;
 
 const grp=id=>state.groups.find(g=>g.id===id)||{name:'—',color:'#888888'};
@@ -535,7 +590,15 @@ function renderHead(){
   const next30=its.reduce((a,i)=>a+[noticeDate(i),parse(cur(i).e)].filter(d=>d&&diff(T,d)>=0&&diff(T,d)<=30).length,0);
   let ctrl='';
   if(ui.view==='timeline')ctrl=`<div class="seg" role="group" aria-label="Zoom">${[[182,'6 months','6 mo'],[365,'1 year','1 yr'],[1095,'3 years','3 yr']].map(([v,l,s])=>`<button data-zoom="${v}" aria-pressed="${ui.span===v}" aria-label="${l}"><span class="long" aria-hidden="true">${l}</span><span class="short" aria-hidden="true">${s}</span></button>`).join('')}</div>`;
-  else if(ui.view==='calendar')ctrl=`<div class="calnav"><button class="icon-btn" data-act="calprev" aria-label="Previous month">‹</button><b>${ui.cal.toLocaleDateString('en-GB',{month:'long',year:'numeric'})}</b><button class="icon-btn" data-act="calnext" aria-label="Next month">›</button><button class="btn sm ghost" data-act="caltoday">Today</button></div>`;
+  else if(ui.view==='calendar'){
+    const away=ui.cal.getFullYear()!==T.getFullYear()||ui.cal.getMonth()!==T.getMonth();
+    ctrl=`<div class="calnav"><button class="navbtn" data-act="calprev" aria-label="Previous month">${svg('<path d="m15 6-6 6 6 6"/>',16,2.2)}</button><b><span class="long">${ui.cal.toLocaleDateString('en-GB',{month:'long',year:'numeric'})}</span><span class="short">${ui.cal.toLocaleDateString('en-GB',{month:'short',year:'numeric'})}</span></b><button class="navbtn" data-act="calnext" aria-label="Next month">${svg('<path d="m9 6 6 6-6 6"/>',16,2.2)}</button>${away?'<button class="btn" data-act="caltoday">Today</button>':''}</div>`;
+  }
+  else if(ui.view==='table'){
+    const open=ui.menu==='sort',curS=SORTS.find(x=>x[0]===ui.sort)||SORTS[0];
+    ctrl=`<div class="dd"><button class="ddbtn" data-act="sortmenu" aria-haspopup="true" aria-expanded="${open}">${svg('<path d="M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4"/>',16,2)}<span class="muted">Sort</span><span class="lbl">${curS[1]}</span>${ICON.chev}</button>
+    ${open?`<div class="ddmenu right" aria-label="Sort items" style="width:230px">${SORTS.map(([k,l])=>{const on=ui.sort===k;return `<button class="ddopt radio" data-sortkey="${k}" aria-pressed="${on}"><span class="tick">${on?ICON.tick:''}</span><span class="fill">${l}</span></button>`}).join('')}</div>`:''}</div>`;
+  }
   $('#head').innerHTML=`<h1>${ui.view[0].toUpperCase()+ui.view.slice(1)}</h1><div class="ctrl">${ctrl}</div>
   <p class="summary">${its.length} items · ${next30} date${next30===1?'':'s'} in the next 30 days · ${kr(spend)} a month</p>`;
 }
@@ -640,7 +703,7 @@ function renderTimeline(items){
       ];
       det=`<div class="det">${prog}<dl class="facts">${facts.map(([k,v,cl])=>`<div><dt>${k}</dt><dd class="${cl}">${esc(v)}</dd></div>`).join('')}</dl>
       ${it.notes?`<p class="dnotes">${esc(it.notes)}</p>`:''}
-      <div class="detbtns"><button class="btn primary" data-open="${it.id}">Edit item</button><button class="btn" data-renew="${it.id}">Mark as renewed</button><button class="btn quiet" data-row="${it.id}">Close</button></div></div>`;
+      ${detBtns(it.id)}</div>`;
     }
     return `<div class="row ${isOpen?'open':''}" id="row-${it.id}"><button class="rowbtn" data-row="${it.id}" aria-expanded="${isOpen}"><span class="lane">
       <span class="lab"><span class="rtext"><span class="rname">${it.priv?`<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Private item"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`:''}<span>${esc(it.name)}</span></span><span class="rsub">${esc(parts.join(' · '))}</span></span><span class="tag ${tone}">${tag}</span></span>
@@ -657,35 +720,74 @@ function renderTimeline(items){
   <div class="legend" style="margin-top:14px"><span><i class="lg passed"></i>Time passed</span><span><i class="lg left"></i>Time left</span><span><i class="lg soon"></i>Ending soon</span><span><i class="lg dia"></i>Notice deadline (last day to cancel)</span><span><i class="lg exp"></i>Expired</span><span><i class="lg today"></i>Today</span><span>${ICON.lockSm} Private item</span></div>`;
 }
 
+/* ---------- Item details (shared by Timeline and Table) ---------- */
+const detBtns=id=>`<div class="detbtns"><div>
+  <button class="btn neutral" data-row="${id}">${svg('<path d="M6 6l12 12M18 6 6 18"/>',15,2.2)}Close</button>
+  <button class="btn soft" data-renew="${id}" title="Start the next period">${svg('<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 5v6h-6"/>',15,2.2)}Renew</button>
+  <button class="btn primary" data-open="${id}">${svg('<path d="M4 20h4L19 9l-4-4L4 16z"/>',15,2.2)}Edit details</button></div></div>`;
+function progressHtml(it){
+  const st=status(it),p=cur(it),ps=parse(p.s),pe=parse(p.e),c=grp(it.g).color;
+  if(!pe||st==='expired'||st==='upcoming')return'';
+  const td=Math.max(1,diff(ps,pe)),pc=Math.min(100,Math.round(Math.max(0,diff(ps,T))/td*100)),left=diff(T,pe);
+  return `<div><div class="prog-top"><b>${pc}% of this period has passed</b><span class="muted">${left===0?'Ends today':left+' of '+td+' days left'}</span></div><div class="prog"><i style="width:${pc}%;background:${c}"></i></div></div>`;
+}
+
 /* ---------- Table ---------- */
+const SORTS=[['end','End date'],['notice','Notice deadline'],['name','Name'],['status','Status'],['cost','Cost per month']];
 function renderTable(items){
-  if(!items.length)return `<div class="tblwrap">${emptyHtml()}</div>`;
-  const {k,d}=ui.sort;
-  const val=it=>k==='name'?it.name.toLowerCase():k==='group'?grp(it.g).name:k==='status'?['soon','active','upcoming','expired'].indexOf(status(it)):k==='cost'?monthly(it):k==='notice'?(noticeDate(it)?.getTime()??9e15):(parse(cur(it).e)?.getTime()??9e15);
-  const sorted=[...items].sort((a,b)=>{const x=val(a),y=val(b);return(x>y?1:x<y?-1:0)*d});
-  const th=(key,label)=>`<th><button data-sort="${key}">${label}${k===key?(d>0?' ↑':' ↓'):''}</button></th>`;
-  return `<div class="tblwrap"><table class="tbl items"><thead><tr>${th('name','Item')}${th('group','Group')}${th('status','Status')}${th('end','Ends')}${th('notice','Notice by')}${th('cost','Cost')}<th>Reminders</th></tr></thead><tbody>${sorted.map(it=>{
-    const g=grp(it.g),e=parse(cur(it).e),n=noticeDate(it);
-    return `<tr data-open="${it.id}"><td><span class="nm">${it.priv?ICON.lockSm:''}${esc(it.name)}</span></td><td><span class="gtag"><i class="dot" style="--c:${g.color}"></i>${esc(g.name)}</span></td><td>${pill(status(it))}</td><td>${e?fmt(e):'<span class="muted">Ongoing</span>'}</td><td>${n?fmt(n):'<span class="muted">—</span>'}</td><td>${it.cost?`${kr(it.cost)}${it.cycle==='month'?'/mo':it.cycle==='year'?'/yr':''}`:'<span class="muted">—</span>'}</td><td>${it.remind.length?[...it.remind].sort((a,b)=>b-a).map(x=>x+'d').join(', '):'<span class="muted">Off</span>'}</td></tr>`;
-  }).join('')}</tbody></table></div>`;
+  if(!items.length)return `<div class="tcard">${emptyHtml()}</div>`;
+  const soon=state.settings.soon,BIG=9e15;
+  const val={
+    end:it=>parse(cur(it).e)?.getTime()??BIG,
+    notice:it=>{const n=noticeDate(it);return n&&n>=T?n.getTime():BIG},
+    name:it=>it.name.toLowerCase(),
+    status:it=>['soon','active','upcoming','expired'].indexOf(status(it)),
+    cost:it=>-monthly(it)
+  }[ui.sort]||(()=>0);
+  const sorted=[...items].sort((a,b)=>{const x=val(a),y=val(b);return x>y?1:x<y?-1:0});
+  return `<div class="tcard"><div class="tgrid thead"><span>Item</span><span>Group</span><span>Status</span><span>Ends</span><span>Notice by</span><span>Cost</span><span>Reminders</span></div>${sorted.map(it=>{
+    const g=grp(it.g),st=status(it),e=parse(cur(it).e),n=noticeDate(it),open=ui.open===it.id,nw=n&&n>=T&&diff(T,n)<=soon;
+    const ends=e?fmt(e):'Ongoing',notice=n?fmt(n):'—';
+    const cost=it.cost?kr(it.cost)+(it.cycle==='month'?'/mo':it.cycle==='year'?'/yr':''):'—';
+    const rem=it.remind.length?[...it.remind].sort((a,b)=>b-a).map(x=>x+'d').join(', '):'Off';
+    const ce=e?'':'mute-t',cn=nw?'warn-t':n?'':'mute-t',cc=it.cost?'':'mute-t',cr=it.remind.length?'':'mute-t';
+    const lock=it.priv?ICON.lockSm:'';
+    const aria=`${it.name}, ${g.name}, ${STATUS[st]}, ends ${e?fmt(e):'never'}${n?', notice by '+fmt(n):''}${it.cost?', '+cost:''}`;
+    return `<div class="trow ${open?'open':''}" id="row-${it.id}"><button class="trowbtn" data-row="${it.id}" aria-expanded="${open}" aria-label="${esc(aria)}">
+      <span class="tgrid" aria-hidden="true"><span class="tname">${lock}<span class="ell">${esc(it.name)}</span></span><span class="gtag ell"><i class="dot" style="--c:${g.color}"></i><span class="ell">${esc(g.name)}</span></span><span>${pill(st)}</span><span class="ell ${ce}">${ends}</span><span class="ell ${cn}">${notice}</span><span class="ell ${cc}">${cost}</span><span class="ell ${cr}">${rem}</span></span>
+      <span class="mcard" aria-hidden="true"><span class="mtop"><i class="dot" style="--c:${g.color}"></i><span class="mname"><b>${lock}<span class="ell">${esc(it.name)}</span></b><small>${esc(g.name)}</small></span>${pill(st)}</span>
+      <span class="mfacts"><span><small>Ends</small><b class="${ce}">${ends}</b></span><span><small>Notice by</small><b class="${cn}">${notice}</b></span><span><small>Cost</small><b class="${cc}">${cost}</b></span><span><small>Reminders</small><b class="${cr}">${rem}</b></span></span></span>
+    </button>${open?`<div class="det">${progressHtml(it)}${it.notes?`<p class="dnotes">${esc(it.notes)}</p>`:''}${detBtns(it.id)}</div>`:''}</div>`;
+  }).join('')}</div>`;
 }
 
 /* ---------- Calendar ---------- */
+const DOW=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 function renderCalendar(items){
-  const y=ui.cal.getFullYear(),mo=ui.cal.getMonth(),first=new Date(y,mo,1),gridStart=addDays(first,-((first.getDay()+6)%7));
-  const evs={},add=(d,ev)=>{if(d.getMonth()!==mo||d.getFullYear()!==y)return;(evs[iso(d)]??=[]).push(ev)};
+  const y=ui.cal.getFullYear(),mo=ui.cal.getMonth(),first=new Date(y,mo,1),lead=(first.getDay()+6)%7,dim=new Date(y,mo+1,0).getDate();
+  const cells=Math.ceil((lead+dim)/7)*7,gridStart=addDays(first,-lead),soon=state.settings.soon;
+  const evs={},put=(d,ev)=>{if(d.getMonth()!==mo||d.getFullYear()!==y)return;(evs[iso(d)]??=[]).push(ev)};
   for(const it of items){
-    const g=grp(it.g),p=cur(it),e=parse(p.e),n=noticeDate(it);
-    if(e)add(e,{it,g,label:status(it)==='expired'?'Expired':'Ends',t:'end'});
-    if(n)add(n,{it,g,label:'Notice deadline',t:'notice'});
-    if(it.cycle==='month'&&!it.trial&&it.cost){const s=parse(p.s),day=Math.min(s.getDate(),new Date(y,mo+1,0).getDate()),bd=new Date(y,mo,day);if(bd>=s&&(!e||bd<e))add(bd,{it,g,label:'Billed '+kr(it.cost),t:'bill'})}
+    const g=grp(it.g),p=cur(it),e=parse(p.e),n=noticeDate(it),st=status(it);
+    if(e){const dd=diff(T,e);put(e,{it,g,rank:1,kind:st==='expired'?'Expired':it.trial?'Trial converts':'Ends',chip:(st==='expired'?'Expired ':'Ends ')+it.name,tone:st==='expired'?'danger':dd>=0&&dd<=soon?'warn':'ok'})}
+    if(n)put(n,{it,g,rank:0,kind:'Notice deadline',chip:'Notice: '+it.name,tone:'warn',notice:true});
+    if(it.cycle==='month'&&!it.trial&&it.cost){const s=parse(p.s),bd=new Date(y,mo,Math.min(s.getDate(),dim));if(bd>=s&&(!e||bd<e))put(bd,{it,g,rank:2,kind:'Billed '+kr(it.cost),chip:'Billed '+it.name,tone:'mute'})}
   }
-  let cells='';
-  for(let i=0;i<42;i++){
-    const d=addDays(gridStart,i),list=evs[iso(d)]||[];
-    cells+=`<div class="day ${d.getMonth()!==mo?'out':''} ${diff(T,d)===0?'is-today':''}"><span class="dn">${d.getDate()}</span>${list.map(ev=>`<button class="ev ${ev.t}" style="--c:${ev.g.color}" data-open="${ev.it.id}" title="${esc(ev.label)}: ${esc(ev.it.name)}"><b>${esc(ev.label)}</b> ${esc(ev.it.name)}</button>`).join('')}</div>`;
+  Object.values(evs).forEach(l=>l.sort((a,b)=>a.rank-b.rank));
+  let days='';
+  for(let i=0;i<cells;i++){
+    const d=addDays(gridStart,i),k=iso(d),l=evs[k]||[],sel=ui.calSel===k;
+    const label=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})+(l.length?`, ${l.length} date${l.length===1?'':'s'}`:'');
+    days+=`<button class="day ${d.getMonth()!==mo?'out':''} ${diff(T,d)===0?'today':''}" data-day="${k}" aria-pressed="${sel}" aria-label="${esc(label)}"><span class="dn">${d.getDate()}</span>${l.slice(0,3).map(ev=>`<span class="chip ${ev.notice?'notice':''}" style="--c:${ev.g.color}">${esc(ev.chip)}</span>`).join('')}${l.length>3?`<span class="more">+${l.length-3} more</span>`:''}</button>`;
   }
-  return `<div class="cal">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div class="dow">${x}</div>`).join('')}${cells}</div>`;
+  const keys=Object.keys(evs).sort().filter(k=>!ui.calSel||k===ui.calSel);
+  const sd=ui.calSel?parse(ui.calSel):null,mname=first.toLocaleDateString('en-GB',{month:'long'});
+  const agenda=keys.map(k=>{const d=parse(k),isT=diff(T,d)===0;
+    return `<div class="ag-day"><div class="ag-date"><b style="color:${isT?'var(--danger)':d<T?'var(--ink-2)':'var(--ink)'}">${d.toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</b><small>${isT?'Today':d.toLocaleDateString('en-GB',{weekday:'long'})}</small></div>
+    <div class="ag-items">${evs[k].map(ev=>`<button class="ag-item" data-agenda="${ev.it.id}"><i class="dot" style="--c:${ev.g.color}"></i><span class="txt"><b class="ell">${esc(ev.it.name)}</b><small class="ell">${esc(ev.g.name)}${ev.notice?' · last day to cancel':''}</small></span><span class="tag ${ev.tone}">${esc(ev.kind)}</span></button>`).join('')}</div></div>`}).join('');
+  return `<div class="calwrap"><div class="tcard"><div class="calgrid">${DOW.map(x=>`<div class="dow">${x}</div>`).join('')}</div><div class="calgrid">${days}</div></div>
+  <div class="tcard"><div class="ag-head"><div><h2>${sd?sd.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'}):'All of '+mname}</h2><small>${sd?'Dates due on this day':'Tap a day to see only that day'}</small></div>${sd?'<button class="btn sm" data-act="calclear">Whole month</button>':''}</div>
+  ${agenda||`<p class="ag-empty">${sd?'Nothing due on this day.':'Nothing due this month.'}</p>`}</div></div>`;
 }
 
 function render(){
@@ -808,7 +910,7 @@ function groupsModal(focusId){
 }
 
 /* ---------- Modals ---------- */
-function openModal(html,cls=''){ui.menu=null;$('#modal').innerHTML=`<div class="dialog ${cls}" role="dialog" aria-modal="true">${html}</div>`;$('#modal').hidden=false;renderTop();renderFilters()}
+function openModal(html,cls=''){ui.menu=null;$('#modal').innerHTML=`<div class="dialog ${cls}" role="dialog" aria-modal="true">${html}</div>`;$('#modal').hidden=false;renderTop();renderFilters();renderHead()}
 function closeModal(){$('#modal').hidden=true;$('#modal').innerHTML=''}
 const mhead=(title,sub)=>`<div class="mhead"><div><h2>${title}</h2>${sub?`<p class="muted">${sub}</p>`:''}</div><button class="icon-btn" data-act="closemodal" aria-label="Close">✕</button></div>`;
 
@@ -906,8 +1008,8 @@ function doPrint(pdf){toast(pdf?'Choose "Save as PDF" in the print dialog.':'Ope
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),3600)}
 
 /* ---------- Actions ---------- */
-const menuTo=name=>{ui.menu=ui.menu===name?null:name;ui.adding=false;ui.newName='';renderTop();renderFilters()};
-const closeMenu=()=>{ui.menu=null;ui.adding=false;ui.newName='';renderTop();renderFilters()};
+const menuTo=name=>{ui.menu=ui.menu===name?null:name;ui.adding=false;ui.newName='';renderTop();renderFilters();renderHead()};
+const closeMenu=()=>{ui.menu=null;ui.adding=false;ui.newName='';renderTop();renderFilters();renderHead()};
 const ACT={
   closedrawer:closeDrawer,closemodal:closeModal,
   storage:()=>{closeMenu();storageModal()},account:()=>{closeMenu();signinModal()},upgrade:()=>{closeMenu();upgradeModal()},
@@ -921,9 +1023,11 @@ const ACT={
   xlsx:()=>{closeMenu();exportCSV()},pdf:()=>{closeMenu();doPrint(true)},print:()=>{closeMenu();doPrint(false)},
   ics:()=>{closeMenu();exportICS()},json:()=>{closeMenu();exportJSON()},
   reset:t=>{if(!t.dataset.armed){t.dataset.armed='1';t.textContent='Click again to reset';return}state=sample();ui.hidden.clear();ui.open=null;save();closeModal();closeDrawer();render();toast('Demo data reset.')},
-  calprev:()=>{ui.cal=new Date(ui.cal.getFullYear(),ui.cal.getMonth()-1,1);render()},
-  calnext:()=>{ui.cal=new Date(ui.cal.getFullYear(),ui.cal.getMonth()+1,1);render()},
-  caltoday:()=>{ui.cal=new Date(T.getFullYear(),T.getMonth(),1);render()},
+  calprev:()=>{ui.cal=new Date(ui.cal.getFullYear(),ui.cal.getMonth()-1,1);ui.calSel=null;render()},
+  calnext:()=>{ui.cal=new Date(ui.cal.getFullYear(),ui.cal.getMonth()+1,1);ui.calSel=null;render()},
+  caltoday:()=>{ui.cal=new Date(T.getFullYear(),T.getMonth(),1);ui.calSel=null;render()},
+  calclear:()=>{ui.calSel=null;render()},
+  sortmenu:()=>menuTo('sort'),
   clearfilters:()=>{ui.filter='all';ui.q='';ui.hidden.clear();$('#q').value='';render()},
   delete:t=>{if(!t.dataset.armed){t.dataset.armed='1';t.textContent='Confirm delete';return}const name=draft.it.name;state.items=state.items.filter(i=>i.id!==draft.it.id);save();closeDrawer();render();toast(`Deleted ${name}.`)},
   renew:()=>{
@@ -961,26 +1065,31 @@ const ACT={
   driveconnect:()=>{state.settings.storage='gdrive';save();closeModal();render();toast('Google Drive connected (simulated). Your encrypted file is synced.')},
 };
 
+function focusRow(it){
+  ui.open=it.id;ui.filter='all';ui.hidden.delete(it.g);ui.collapsed.delete(it.g);ui.menu=null;
+  if(ui.q&&!searched().includes(it)){ui.q='';$('#q').value=''}
+  render();const el=document.getElementById('row-'+it.id);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});
+}
 document.addEventListener('click',e=>{
-  if(ui.menu&&!e.target.closest('.dd,.menu-wrap')){ui.menu=null;renderTop();renderFilters()}
+  if(ui.menu&&!e.target.closest('.dd,.menu-wrap')){ui.menu=null;renderTop();renderFilters();renderHead()}
   if(e.target.id==='modal'){closeModal();return}
-  const t=e.target.closest('[data-open],[data-act],[data-view],[data-filter],[data-group],[data-sort],[data-tpl],[data-zoom],[data-row],[data-collapse],[data-next],[data-renew]');if(!t)return;
+  const t=e.target.closest('[data-open],[data-act],[data-view],[data-filter],[data-group],[data-sort],[data-tpl],[data-zoom],[data-row],[data-collapse],[data-next],[data-renew],[data-sortkey],[data-day],[data-agenda]');if(!t)return;
   const D=t.dataset;
   if(D.view){ui.view=D.view;ui.menu=null;render();return}
   if(D.zoom){ui.span=+D.zoom;render();return}
   if(D.filter){ui.filter=D.filter;ui.menu=null;render();return}
   if(D.group){const g=D.group;ui.hidden.has(g)?ui.hidden.delete(g):ui.hidden.add(g);render();return}
-  if(D.sort){const k=D.sort;ui.sort=ui.sort.k===k?{k,d:-ui.sort.d}:{k,d:1};render();return}
+  if(D.sortkey){ui.sort=D.sortkey;ui.menu=null;render();return}
+  if(D.day){ui.calSel=ui.calSel===D.day?null:D.day;render();return}
+  if(D.agenda){const it=state.items.find(i=>i.id===D.agenda);if(it){ui.view='timeline';focusRow(it)}return}
   if(D.tpl){const v=D.tpl;closeModal();openDrawer(null,v==='blank'?{}:TEMPLATES[+v]);return}
   if(D.collapse){const g=D.collapse;ui.collapsed.has(g)?ui.collapsed.delete(g):ui.collapsed.add(g);render();return}
   if(D.row){ui.open=ui.open===D.row?null:D.row;render();return}
   if(D.renew){const it=state.items.find(i=>i.id===D.renew);if(!it)return;const np=renewItem(it);if(!np)return;save();render();toast(`Renewed ${it.name}: ${fmt(parse(np.s))} – ${fmt(parse(np.e))}.`);return}
   if(D.next){
     const it=state.items.find(i=>i.id===D.next);if(!it)return;
-    if(ui.view!=='timeline'){openDrawer(it.id);return}
-    ui.open=it.id;ui.filter='all';ui.hidden.delete(it.g);ui.collapsed.delete(it.g);
-    if(ui.q&&!searched().includes(it)){ui.q='';$('#q').value=''}
-    render();const el=document.getElementById('row-'+it.id);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});return;
+    if(ui.view==='calendar')ui.view='timeline';
+    focusRow(it);return;
   }
   if(D.open){openDrawer(D.open);return}
   const a=D.act;if(a&&ACT[a]){e.preventDefault();ACT[a](t,e)}
