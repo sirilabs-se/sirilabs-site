@@ -1,0 +1,1268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Löptid Mock-up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ee;--surface:#fffefb;--surface-2:#efece5;--row-open:#f8f6f1;--ink:#1d2126;--ink-2:#575d66;--ink-3:#7b8088;--line:#e1ddd3;
+  --accent:#2d5a4d;--accent-2:#e2ede8;--accent-ink:#fff;--warn:#a9501c;--warn-bg:#f8e8dd;--danger:#a3342f;--danger-bg:#f6e1df;--on-danger:#fff;
+  --radius:12px;--shadow:0 1px 2px rgba(20,20,20,.04),0 12px 32px rgba(20,20,20,.07);color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141619;--surface:#1b1e22;--surface-2:#24282d;--row-open:#20242a;--ink:#ebe8e2;--ink-2:#a8acb2;--ink-3:#767b82;--line:#30353b;
+  --accent:#86c3ad;--accent-2:#1e2f29;--accent-ink:#0e1714;--warn:#e7a072;--warn-bg:#3a271c;--danger:#ec8f89;--danger-bg:#3b2120;--on-danger:#141619;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px rgba(0,0,0,.35);color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#141619;--surface:#1b1e22;--surface-2:#24282d;--row-open:#20242a;--ink:#ebe8e2;--ink-2:#a8acb2;--ink-3:#767b82;--line:#30353b;
+  --accent:#86c3ad;--accent-2:#1e2f29;--accent-ink:#0e1714;--warn:#e7a072;--warn-bg:#3a271c;--danger:#ec8f89;--danger-bg:#3b2120;--on-danger:#141619;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px rgba(0,0,0,.35);color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 'Hanken Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif}
+button{font:inherit;color:inherit}
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:600;letter-spacing:-.01em;margin:0}
+h2{font-size:22px}h3{font-size:16px;margin:22px 0 8px}
+p{margin:0}
+.muted{color:var(--ink-2)}small,.small{font-size:12px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input,select,textarea{font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+input:disabled{opacity:.5}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--c);flex:none}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:44px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:0 14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--ink-3)}
+.btn:disabled{opacity:.6;cursor:default}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.ghost{background:transparent}
+.btn.quiet{background:transparent;border-color:transparent;color:var(--ink-2)}
+.btn.sm{height:36px;padding:0 12px;font-size:13px}
+.btn.danger-ghost{background:transparent;color:var(--danger);border-color:transparent}
+.btn.big{width:100%;height:48px;font-size:15px}
+.btn.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.icon-btn{border:0;background:var(--surface-2);width:44px;height:44px;border-radius:10px;cursor:pointer;flex:none;display:grid;place-items:center}
+.linkbtn{border:0;background:none;color:var(--ink-2);text-decoration:underline;cursor:pointer;padding:8px}
+.av{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:12px;font-weight:700}
+.av.big{width:44px;height:44px;font-size:18px}
+
+/* Top bar */
+.topbar{background:var(--surface);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px}
+.brand{display:flex;align-items:center;gap:8px;flex:none}
+.brand-name{font-family:'Fraunces',serif;font-size:22px;font-weight:600;white-space:nowrap}
+.views{display:flex;padding:3px;border-radius:10px;background:var(--surface-2);flex:none}
+.views button{border:0;height:38px;padding:0 12px;border-radius:7px;background:transparent;color:var(--ink-2);font-weight:500;cursor:pointer}
+.views button[aria-current="page"]{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.search{flex:1 1 200px;min-width:0;max-width:380px;display:flex;align-items:center;gap:8px;height:44px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink-2)}
+.search:focus-within{outline:2px solid var(--accent);border-color:transparent}
+.search input{flex:1;min-width:0;border:0;background:transparent;padding:0;color:var(--ink)}
+.search input:focus{outline:none}
+.actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+.avatar{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface-2);font-weight:700;cursor:pointer;display:grid;place-items:center;padding:0}
+.avatar.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.menu-wrap{position:relative}
+.menu{position:absolute;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);width:270px;max-width:calc(100vw - 32px);padding:6px;z-index:30}
+.menu button{display:flex;flex-direction:column;align-items:flex-start;width:100%;text-align:left;padding:8px 10px;min-height:44px;justify-content:center;border:0;border-radius:8px;background:none;cursor:pointer;font-weight:600}
+.menu button:hover{background:var(--surface-2)}
+.menu button small{color:var(--ink-2);font-weight:400}
+.menu hr{border:0;border-top:1px solid var(--line);margin:4px 0}
+.menu-id{display:flex;align-items:center;gap:10px;padding:8px 10px 10px}
+.menu-id small{display:block;color:var(--ink-2)}
+.menu-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-2);padding:6px 10px 2px}
+
+/* Layout */
+main{max-width:1280px;margin:0 auto;padding:28px 20px 48px;display:flex;flex-direction:column;gap:24px}
+.head{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.head h1{flex:1 1 auto;min-width:0;font-size:clamp(28px,4vw,34px);line-height:1.1}
+.head .ctrl{flex:none;align-self:flex-end;margin-bottom:calc(-6px - 1.45em)}
+.head .summary{flex:0 0 100%;color:var(--ink-2)}
+.seg{display:flex;padding:3px;border-radius:10px;background:var(--surface-2)}
+.seg button{border:0;height:38px;padding:0 14px;border-radius:7px;background:transparent;color:var(--ink-2);font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.short{display:none}
+.head .ctrl{position:relative;z-index:20}
+.navbtn{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;padding:0}
+.navbtn:hover{border-color:var(--ink-3)}
+.calnav{display:flex;align-items:center;gap:6px}
+.calnav b{min-width:120px;text-align:center}
+.calnav .icon-btn{width:36px;height:36px}
+.eyebrow{font-family:inherit;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-2);margin:0}
+
+/* Next up */
+.nu-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.nu-head small{display:block;color:var(--ink-2)}
+.nu{display:grid;grid-template-columns:repeat(auto-fit,minmax(136px,1fr));gap:10px}
+.nucard{min-width:0;display:flex;flex-direction:column;gap:8px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);text-align:left;cursor:pointer}
+.nucard:hover{border-color:var(--ink-3)}
+.nucard .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.nucard .num{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6px}
+.nucard .big{font-family:'Fraunces',serif;font-size:34px;font-weight:600;line-height:1}
+.nucard .unit{font-size:13px;color:var(--ink-2)}
+.nucard .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nucard .dt{font-size:13px;color:var(--ink-2)}
+.tone{font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;white-space:nowrap}
+.ok{background:var(--accent-2);color:var(--accent)}
+.warn{background:var(--warn-bg);color:var(--warn)}
+.danger{background:var(--danger-bg);color:var(--danger)}
+.mute{background:var(--surface-2);color:var(--ink-2)}
+
+/* Filters */
+.filters{display:flex;align-items:center;gap:10px}
+.dd{position:relative;min-width:0}
+.ddbtn{display:inline-flex;align-items:center;gap:7px;max-width:100%;height:44px;padding:0 10px 0 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:14px;cursor:pointer;white-space:nowrap}
+.ddbtn.active{border-color:var(--accent)}
+.ddbtn .lbl{min-width:0;font-weight:700;overflow:hidden;text-overflow:ellipsis}
+.ddbtn .cnt{font-size:12px;color:var(--ink-2)}
+.ddbtn svg{flex:none;color:var(--ink-2)}
+.dots{display:inline-flex;align-items:center}
+.dots i{width:10px;height:10px;border-radius:50%;border:2px solid var(--surface);background:var(--c);margin-left:-4px}
+.dots i:first-child{margin-left:0}
+.ddmenu{position:absolute;top:50px;left:0;z-index:30;width:250px;padding:6px;display:flex;flex-direction:column;gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+.ddmenu.right{left:auto;right:0;width:260px}
+.ddopt{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 10px;border:0;border-radius:8px;background:transparent;font-size:14px;text-align:left;cursor:pointer}
+.ddopt:hover{background:var(--surface-2)}
+.ddopt[aria-pressed="true"].radio{background:var(--accent-2);font-weight:700}
+.ddopt .fill{flex:1}
+.ddopt .cnt{font-size:12px;color:var(--ink-2)}
+.ddopt .tick{width:16px;flex:none;display:inline-flex;color:var(--accent)}
+.box{width:18px;height:18px;flex:none;display:inline-grid;place-items:center;border-radius:5px;border:2px solid var(--ink-3);color:#fff}
+.ddopt.add{color:var(--accent);font-weight:600}
+.ddopt.add .box{border-style:dashed;border-color:var(--accent);color:var(--accent)}
+.ngform{display:flex;flex-direction:column;gap:6px;padding:6px 4px}
+.ngform label{font-size:12px;font-weight:600;color:var(--ink-2);padding:0 2px}
+.ngrow{display:flex;align-items:center;gap:6px}
+.ngrow .dot{width:12px;height:12px;margin:0 2px 0 4px}
+.ngrow input{flex:1;min-width:0;height:38px;padding:0 10px;font-size:14px;border-color:var(--accent)}
+.ngrow .btn{height:38px;padding:0 12px;font-size:13px}
+.ngform .linkbtn{align-self:flex-start;text-decoration:none;font-size:13px;padding:6px 4px}
+.ddfoot{display:flex;gap:6px;padding:6px 4px 2px;border-top:1px solid var(--line);margin-top:4px}
+.ddfoot .btn{flex:1;height:38px;font-size:13px}
+
+/* Timeline */
+.tl{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.axis{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--line);border-radius:16px 16px 0 0;padding:0 16px}
+.lane{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px}
+.lab{flex:1 1 240px;min-width:0}
+.trk{flex:999 1 420px;min-width:0;position:relative;display:block}
+.axis .lane{align-items:flex-end;row-gap:0}
+.axis .lab{height:40px;display:flex;align-items:flex-end;padding-bottom:8px;font-size:12px;font-weight:600;color:var(--ink-2)}
+.axis .trk{height:44px;overflow:hidden}
+.mtick{position:absolute;bottom:0;height:8px;border-left:1px solid var(--line)}
+.mlab{position:absolute;bottom:8px;padding-left:4px;font-size:11px;font-weight:600;color:var(--ink-2);white-space:nowrap;font-style:normal}
+.tpill{position:absolute;top:3px;transform:translateX(-50%);padding:1px 7px;border-radius:99px;background:var(--danger);color:var(--on-danger);font-size:10px;font-weight:700;white-space:nowrap}
+.ghead{width:100%;display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;min-height:44px;padding:8px 16px;border:0;border-bottom:1px solid var(--line);background:var(--surface-2);text-align:left;cursor:pointer}
+.ghead svg{flex:none;transition:transform .15s}
+.ghead[aria-expanded="false"] svg{transform:rotate(-90deg)}
+.ghead .gsp{margin-left:auto;white-space:nowrap}
+.row{border-bottom:1px solid var(--line)}
+.row.open{background:var(--row-open)}
+.rowbtn{width:100%;padding:10px 16px;border:0;background:transparent;text-align:left;cursor:pointer}
+.rowbtn:hover .rname{text-decoration:underline}
+.rowbtn .lab{display:flex;align-items:center;gap:10px}
+.rtext{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.rname{display:flex;align-items:center;gap:6px;min-width:0;font-weight:600}
+.rname span,.rsub{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row.open .rname span{white-space:normal;overflow-wrap:anywhere}
+.dnotes{overflow-wrap:anywhere}
+.rname svg{flex:none;color:var(--ink-2)}
+.rsub{font-size:12px;color:var(--ink-2)}
+.tag{flex:none;padding:3px 9px;border-radius:99px;font-size:12px;font-weight:700;white-space:nowrap}
+.rowbtn .trk{height:28px}
+.vtick{position:absolute;top:0;bottom:0;border-left:1px dashed var(--line)}
+.tline{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--danger);opacity:.55}
+.pbar{position:absolute;top:8px;height:12px;border-radius:6px;overflow:hidden}
+.pbar i{display:block;height:100%}
+.ndia{position:absolute;top:8px;width:12px;height:12px;margin-left:-6px;transform:rotate(45deg);background:var(--surface);border:2px solid var(--warn)}
+.det{padding:4px 16px 18px;display:flex;flex-direction:column;gap:14px}
+.prog-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;font-size:13px}
+.prog{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:6px}
+.prog i{display:block;height:100%;border-radius:99px}
+.facts{margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px}
+.facts div{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.facts dt{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2)}
+.facts dd{margin:2px 0 0;font-weight:600}
+.facts dd.w{color:var(--warn)}.facts dd.d{color:var(--danger)}
+.dnotes{font-size:14px;color:var(--ink-2)}
+.detbtns{display:flex;justify-content:center}
+.detbtns>div{display:flex;gap:8px;width:min(100%,456px)}
+.detbtns .btn{flex:1 1 0;min-width:0;height:44px;padding:0 6px;font-size:14px}
+.btn.soft{background:var(--accent-2);border-color:color-mix(in srgb,var(--accent) 35%,transparent);color:var(--accent)}
+.btn.neutral{background:var(--surface-2);color:var(--ink)}
+
+/* Table (desktop grid + phone cards) */
+.tcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.tgrid{display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1.3fr) minmax(0,1.1fr) minmax(0,1.1fr) minmax(0,1.1fr) minmax(0,1fr) 110px;column-gap:16px;align-items:center;padding:0 16px}
+.thead{padding:12px 16px;background:var(--surface-2);border-bottom:1px solid var(--line);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2)}
+.trow{border-bottom:1px solid var(--line)}
+.trow:last-child{border-bottom:0}
+.trow.open{background:var(--row-open)}
+.trowbtn{display:block;width:100%;padding:0;border:0;background:transparent;text-align:left;cursor:pointer;font-size:14px}
+.trowbtn:hover .tname .ell,.trowbtn:hover .mname b .ell{text-decoration:underline}
+.trowbtn .tgrid{min-height:48px}
+.trow.open .tname .ell,.trow.open .mname .ell{white-space:normal;overflow-wrap:anywhere}
+.thead>span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.trem{display:none}
+.ell{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.tname{display:flex;align-items:center;gap:6px;font-weight:600;min-width:0}
+.tname svg,.mname svg{flex:none;color:var(--ink-2)}
+.mute-t{color:var(--ink-2)}.warn-t{color:var(--warn)}
+.mcard{display:none}
+.mtop{display:flex;align-items:flex-start;gap:10px}
+.mtop .dot{margin-top:6px}
+.mname{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.mname b{display:flex;align-items:center;gap:6px;min-width:0;font-size:15px}
+.mname small{color:var(--ink-2)}
+.mfacts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;margin-left:20px;padding:10px 12px;border-radius:10px;background:var(--bg)}
+.mfacts>span{display:flex;flex-direction:column;min-width:0}
+.mfacts small{font-size:11px;font-weight:600;color:var(--ink-2)}
+.mfacts b{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:10px 20px;font-size:12px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.lg{display:inline-block;width:22px;height:10px;border-radius:5px}
+.lg.passed{background:var(--ink-3)}
+.lg.left{border:1px solid var(--ink-3);background:var(--surface-2)}
+.lg.soon{background:var(--ink-3);box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--warn)}
+.lg.exp{background:repeating-linear-gradient(135deg,var(--ink-3) 0 4px,transparent 4px 8px)}
+.lg.dia{width:9px;height:9px;border-radius:0;transform:rotate(45deg);border:2px solid var(--warn)}
+.lg.today{width:2px;height:14px;border-radius:0;background:var(--danger)}
+.empty{padding:48px 16px;text-align:center;color:var(--ink-2);display:flex;flex-direction:column;align-items:center;gap:12px}
+
+/* Pills */
+.pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;white-space:nowrap;flex:none}
+.pill.active{background:var(--accent-2);color:var(--accent)}
+.pill.soon{background:var(--warn-bg);color:var(--warn)}
+.pill.expired{background:var(--danger-bg);color:var(--danger)}
+.pill.upcoming{background:var(--surface-2);color:var(--ink-2)}
+.nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;min-width:0}
+.nm svg{flex:none;color:var(--ink-2)}
+
+/* Table */
+.tblwrap{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow-x:auto;box-shadow:var(--shadow)}
+.tbl{width:100%;border-collapse:collapse;font-size:14px;min-width:780px}
+.tbl th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);font-weight:600;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.tbl th button{border:0;background:none;padding:0;font:inherit;color:inherit;text-transform:inherit;letter-spacing:inherit;cursor:pointer}
+.tbl td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tbody tr:last-child td{border-bottom:0}
+.tbl.items tbody tr{cursor:pointer}
+.tbl.items tbody tr:hover{background:var(--surface-2)}
+.gtag{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.sees-tbl{min-width:560px;font-size:13px;box-shadow:none}
+.sees-tbl td:first-child{font-weight:600}
+
+/* Calendar */
+.calwrap{display:flex;flex-direction:column;gap:16px}
+.calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.dow{padding:8px 10px;font-size:11px;font-weight:700;color:var(--ink-2);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.day{min-width:0;min-height:108px;display:flex;flex-direction:column;align-items:stretch;gap:3px;padding:6px;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface);text-align:left;cursor:pointer}
+.day:nth-child(7n){border-right:0}
+.day.out{background:var(--bg)}
+.day:hover{background:var(--surface-2)}
+.day[aria-pressed="true"]{background:var(--accent-2);box-shadow:inset 0 0 0 2px var(--accent)}
+.dn{width:24px;height:24px;display:grid;place-items:center;border-radius:50%;font-size:12px;font-weight:600;color:var(--ink-2)}
+.day.out .dn{color:var(--ink-2)}
+.day.today .dn{background:var(--danger);color:var(--on-danger)}
+.chip{display:block;height:20px;line-height:20px;padding:0 6px;border-radius:4px;border-left:3px solid var(--c);background:color-mix(in srgb,var(--c) 15%,var(--surface));font-size:11px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.chip.notice{border-left-color:var(--warn);background:var(--warn-bg)}
+.more{font-size:11px;font-weight:700;color:var(--ink-2)}
+.chips{display:flex;flex-direction:column;gap:3px;min-width:0;overflow:hidden}
+.chip{min-width:0;max-width:100%}
+.ag-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.ag-head h2{font-size:20px}
+.ag-head small{display:block;color:var(--ink-2)}
+.ag-day{display:flex;flex-wrap:wrap;gap:4px 16px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.ag-day:last-child{border-bottom:0}
+.ag-date{flex:0 0 120px;display:flex;flex-direction:column;padding-top:6px}
+.ag-date small{color:var(--ink-2)}
+.ag-items{flex:1 1 260px;min-width:0;display:flex;flex-direction:column}
+.ag-item{width:100%;min-height:44px;display:flex;align-items:center;gap:10px;padding:4px 0;border:0;background:transparent;text-align:left;cursor:pointer}
+.ag-item .txt{flex:1;min-width:0;display:flex;flex-direction:column}
+.ag-item .txt small{color:var(--ink-2)}
+.ag-item:hover .txt b{text-decoration:underline}
+.ag-empty{padding:24px 16px;color:var(--ink-2)}
+
+/* Drawer */
+dialog{color:inherit}
+dialog::backdrop{background:rgba(15,17,20,.4)}
+.drawer{position:fixed;inset:0 0 0 auto;margin:0;height:100vh;height:100dvh;max-height:none;width:min(480px,100%);max-width:100%;background:var(--surface);border:0;border-left:1px solid var(--line);box-shadow:var(--shadow);overflow-y:auto;padding:max(20px,env(safe-area-inset-top)) max(22px,env(safe-area-inset-right)) 0 22px}
+.drawer::backdrop{background:rgba(15,17,20,.32)}
+.field .err{color:var(--danger);font-size:12px;font-weight:600}
+.field input[aria-invalid="true"]{border-color:var(--danger)}
+.dhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:16px}
+.dhead h2{margin-top:2px}
+.dform{display:flex;flex-direction:column;gap:14px}
+.field{display:flex;flex-direction:column;gap:5px;border:0;padding:0;margin:0;min-width:0}
+.field>span,.field>legend{font-size:13px;font-weight:600;color:var(--ink-2);padding:0}
+.field>legend{margin-bottom:6px}
+.field small{color:var(--ink-3)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.check{display:flex;align-items:center;gap:8px;font-size:14px;margin-top:-6px;cursor:pointer}
+.check input{width:auto;accent-color:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip-check{position:relative;cursor:pointer}
+.chip-check input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chip-check span{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:99px;padding:5px 11px;font-size:13px;background:var(--bg)}
+.chip-check input:checked+span{background:var(--accent-2);border-color:var(--accent);color:var(--accent);font-weight:600}
+.chip-check input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+.pro{font-style:normal;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:var(--ink);color:var(--bg);padding:1px 5px;border-radius:4px}
+.toggle{position:relative;display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:10px;cursor:pointer}
+.toggle input{position:absolute;opacity:0;width:1px;height:1px}
+.sw{width:36px;height:20px;border-radius:99px;background:var(--line);position:relative;flex:none;margin-top:2px;transition:background .15s}
+.sw::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.toggle input:checked+.sw{background:var(--accent)}
+.toggle input:checked+.sw::after{left:18px}
+.toggle input:focus-visible+.sw{outline:2px solid var(--accent);outline-offset:2px}
+.toggle small{display:block;color:var(--ink-2)}
+.hist{font-size:13px;color:var(--ink-2);background:var(--surface-2);border-radius:8px;padding:8px 12px}
+.hist span{font-weight:600;display:block;margin-bottom:2px}
+.preview{background:var(--surface-2);border-radius:10px;padding:12px}
+.pv-head{font-size:13px;font-weight:700}
+.pv-head .muted{font-weight:400}
+.pv-head.small{font-size:12px;margin-top:4px}
+.mail{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:8px 0 12px;font-size:14px}
+.mail-from{font-size:11px;color:var(--ink-3);margin-bottom:4px}
+.mail-subj{font-weight:700;margin-bottom:4px}
+.sees{list-style:none;padding:0;margin:6px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+.sees li{font-size:12px;padding:3px 9px;border-radius:99px}
+.sees .y{background:var(--surface);border:1px solid var(--line)}
+.sees .n{background:var(--accent-2);color:var(--accent);font-weight:600}
+.drop{display:flex;gap:12px;align-items:flex-start;border:1.5px dashed var(--line);border-radius:10px;padding:14px;color:var(--ink-2)}
+.drop svg{flex:none;margin-top:2px}
+.drop b{display:block;color:var(--ink)}
+.drop small{display:block}
+.dactions{position:sticky;bottom:0;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--surface);border-top:1px solid var(--line);padding:14px 0 max(18px,env(safe-area-inset-bottom));margin-top:6px}
+.sp{flex:1}
+
+/* Modal */
+.dialog{background:var(--surface);border:0;border-radius:16px;width:min(760px,calc(100% - 32px));max-width:none;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;padding:22px;box-shadow:var(--shadow)}
+body.locked{overflow:hidden}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.dialog.narrow{width:min(440px,100%)}
+.mhead{display:flex;justify-content:space-between;gap:16px;margin-bottom:16px}
+.mhead p{margin-top:6px}
+.sopts{display:flex;flex-direction:column;gap:10px;margin:0}
+.sopt{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer}
+.sopt input{margin-top:3px;width:auto;accent-color:var(--accent)}
+.sopt>div{flex:1}
+.sopt p{margin-top:3px;font-size:14px;color:var(--ink-2)}
+.sopt.on{border-color:var(--accent);background:var(--accent-2)}
+.sopt.disabled{opacity:.55;cursor:default}
+.sopt-t{display:flex;justify-content:space-between;gap:10px}
+.price{font-size:11px;font-weight:700;color:var(--ink-2);text-transform:uppercase;letter-spacing:.05em}
+.note{font-size:13px;border-radius:8px;padding:8px 10px;margin-top:8px}
+.note.warn{background:var(--warn-bg);color:var(--warn)}
+.mfoot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:18px}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.plan{border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.plan.featured{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.plan h3{margin:0}
+.amt{font-family:'Fraunces',serif;font-size:26px;font-weight:600}
+.amt small{font-family:'Hanken Grotesk',sans-serif;font-size:13px;color:var(--ink-2);font-weight:400}
+.plan ul{margin:0;padding-left:18px;font-size:14px;color:var(--ink-2);flex:1;display:flex;flex-direction:column;gap:4px}
+.signin{display:flex;flex-direction:column;gap:10px}
+.waiting{text-align:center;padding:20px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.spinner{display:inline-block;width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.acct{display:flex;gap:12px;align-items:center}
+.acct small{display:block}
+.steps{padding-left:20px;display:flex;flex-direction:column;gap:6px;color:var(--ink-2);margin:0}
+code{font-size:13px;background:var(--surface-2);padding:1px 5px;border-radius:4px}
+.glist{display:flex;flex-direction:column;gap:8px}
+.grow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.grow input[type=text]{flex:1;min-width:140px}
+.grow input[type=color]{width:34px;height:34px;padding:2px;border-radius:8px;cursor:pointer;flex:none;background:var(--surface)}
+.grow .count{min-width:58px;text-align:right;font-size:12px;color:var(--ink-2)}
+.gbtns{display:flex;gap:4px}
+.gbtns .icon-btn:disabled{opacity:.35;cursor:default}
+.gconfirm{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:var(--danger-bg);color:var(--danger);border-radius:8px;padding:8px 10px;font-size:14px}
+.gconfirm select{width:auto;padding:5px 8px}
+.newgrp{display:flex;gap:8px}
+.tpls{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.tpl{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:12px 14px;cursor:pointer}
+.tpl:hover{border-color:var(--c,var(--ink-3))}
+.tpl small{color:var(--ink-2)}
+.tpl.blank{border-style:dashed}
+.tpl .dot{margin-bottom:4px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:80;max-width:calc(100% - 32px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.foot{font-size:13px;color:var(--ink-3);text-align:center}
+.print-head{display:none}
+
+/* Phone */
+/* Table: drop the Reminders column on narrower screens, cards below 760px */
+@media (max-width:999px){.tgrid{grid-template-columns:minmax(0,2.4fr) minmax(0,1.3fr) minmax(0,1.1fr) minmax(0,1.1fr) minmax(0,1.1fr) minmax(0,1fr)}.tgrid>:nth-child(7){display:none}.trem{display:block}}
+@media (max-width:759px){.thead,.trowbtn .tgrid{display:none}.mcard{display:flex;flex-direction:column;gap:10px;padding:14px 16px}.trem{display:none}}
+@media (max-width:600px){
+  .topbar-in{padding:12px max(16px,env(safe-area-inset-right)) 12px max(16px,env(safe-area-inset-left));column-gap:10px}
+  .views button{padding:0 8px}
+  .search{flex-basis:110px}
+  main{padding:20px 16px 40px}
+  .head .ctrl{margin-bottom:0;align-self:center}
+  .head .summary{font-size:13px}
+  .seg button{padding:0 9px}
+  .long{display:none}.short{display:inline}
+  .calnav b{min-width:64px!important}
+  .chips{flex-direction:row;flex-wrap:wrap}
+  .chip{flex:0 0 6px;width:6px;height:6px;padding:0;border:0;border-radius:50%;background:var(--c);font-size:0}
+  .chip.notice{background:var(--warn)}
+  .more{font-size:10px}
+  .detbtns .btn svg{display:none}
+  .detbtns>div{width:100%}
+  .calnav{gap:4px}
+  .calnav b{min-width:56px!important;font-size:14px}
+  .dialog{width:calc(100% - 16px);max-height:calc(100dvh - 16px);padding:18px 16px}
+  .detbtns .btn{font-size:13px}
+  .row2{grid-template-columns:1fr}
+  .day{min-height:70px;padding:3px}
+  .ev{font-size:10px;padding:2px 4px}
+  .dow{padding:6px 4px;font-size:10px}
+  .drawer{width:100%;border-left:0;padding:max(16px,env(safe-area-inset-top)) 16px 0}
+}
+@media (max-width:419px){.detbtns .btn svg{display:none}}
+@media (min-width:420px) and (max-width:600px){.detbtns .btn svg{display:inline}}
+@media (max-width:359px){.brand-name{display:none}.ddbtn .dots{display:none}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+/* Alternative variant: reviewer's phone header + timeline cards */
+@media (max-width:600px){
+  .v-alt .brand{order:1;flex:1 1 auto}
+  .v-alt .actions{order:2;margin-left:0}
+  .v-alt .search{order:3;flex:1 1 100%;max-width:none}
+  .v-alt .views{order:4;flex:1 1 100%}
+  .v-alt .views button{flex:1 1 0}
+  .v-alt .brand-name{display:inline}
+}
+.tcards{display:flex;flex-direction:column;gap:18px}
+.tc-group{display:flex;flex-direction:column;gap:10px}
+.tc-ghead{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;min-height:44px;padding:0 4px;border:0;background:transparent;text-align:left;cursor:pointer}
+.tc-ghead svg{flex:none;transition:transform .15s}
+.tc-ghead[aria-expanded="false"] svg{transform:rotate(-90deg)}
+.tc-ghead .gsp{margin-left:auto;white-space:nowrap}
+.tc{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.tc.soon{border-color:color-mix(in srgb,var(--warn) 50%,transparent)}
+.tc.expired{border-color:color-mix(in srgb,var(--danger) 35%,transparent)}
+.tc.open{background:var(--row-open)}
+.tcbtn{width:100%;display:flex;flex-direction:column;gap:10px;padding:14px 16px;border:0;background:transparent;text-align:left;cursor:pointer}
+.tc-top{display:flex;align-items:flex-start;gap:10px}
+.tc-name{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.tc-name b{display:flex;align-items:center;gap:6px;min-width:0;font-size:15px}
+.tc-name b svg{flex:none;color:var(--ink-2)}
+.tc.open .tc-name .ell{white-space:normal;overflow-wrap:anywhere}
+.tc-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:12px;color:var(--ink-2)}
+.tc-prog{display:flex;flex-direction:column;gap:5px}
+.tc-prog .bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.tc-prog .bar i{display:block;height:100%;border-radius:99px}
+.tc-prog .cap{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--ink-2)}
+.tc-state{font-size:12px;font-weight:600;color:var(--ink-2)}
+.tc-state.exp{color:var(--danger)}
+@media print{
+  .topbar,.nextup,.filters,.drawer,.dialog,.toast,.foot,.legend,.head .ctrl,.detbtns{display:none!important}
+  .tcard{box-shadow:none;border-color:#ccc}
+  .trowbtn .tgrid{display:grid!important}.thead{display:grid!important}.mcard{display:none!important}
+  .print-head{display:block}
+  .print-head h1{font-size:22px}
+  body{background:#fff;color:#000}
+  main{padding:0;max-width:none}
+  .tl,.tblwrap,.cal{box-shadow:none;border-color:#ccc}
+  .axis{position:static}
+  .tblwrap{overflow:visible}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="2" y="4" width="16" height="4" rx="2" fill="#4f6db3"/><rect x="8" y="11" width="16" height="4" rx="2" fill="#c0643f"/><rect x="4" y="18" width="12" height="4" rx="2" fill="#5e8f6e"/></svg>
+      <span class="brand-name">Löptid</span>
+    </div>
+    <nav class="views" aria-label="View">
+      <button data-view="timeline">Timeline</button>
+      <button data-view="table">Table</button>
+      <button data-view="calendar">Calendar</button>
+    </nav>
+    <label class="search">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search items" aria-label="Search items">
+    </label>
+    <div class="actions">
+      <button class="btn primary" data-act="add"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add</button>
+      <div class="menu-wrap" id="acctWrap"></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="print-head"><h1>Löptid</h1><p id="printDate"></p></section>
+  <section class="nextup" id="nextup" aria-labelledby="nextupTitle"></section>
+  <section class="filters" id="filters" aria-label="Filters"></section>
+  <section class="head" id="head"></section>
+  <section id="view"></section>
+  <p class="foot">Interactive mock-up. Your changes are saved in this browser only. Sign-in, payments, sync and reminders are simulated.</p>
+</main>
+
+<dialog id="drawer" class="drawer" aria-labelledby="drawerTitle"></dialog>
+<dialog id="modal" class="dialog" aria-labelledby="modalTitle"></dialog>
+<p id="live" class="sr-only" role="status" aria-live="polite"></p>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+const STORE_KEY='loptid-mock-v1';
+const VARIANT='standard'; // 'standard' | 'alt'
+const LOCALE='en-GB';     // one place to change date formatting, e.g. 'sv-SE'
+const phoneMQ=matchMedia('(max-width:600px)');
+if(VARIANT==='alt')document.body.classList.add('v-alt');
+const cardsMode=()=>VARIANT==='alt'&&phoneMQ.matches;
+const DAY=86400000;
+const T=(()=>{const d=new Date();d.setHours(0,0,0,0);return d})();
+const $=s=>document.querySelector(s);
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parse=s=>{if(!s)return null;const[y,m,dd]=s.split('-').map(Number);return new Date(y,m-1,dd)};
+const diff=(a,b)=>Math.round((b-a)/DAY);
+const fmt=d=>d?d.toLocaleDateString(LOCALE,{day:'numeric',month:'short',year:'numeric'}):'—';
+const fmtS=d=>d.toLocaleDateString(LOCALE,{day:'numeric',month:'short'});
+const fmtM=d=>d.toLocaleDateString(LOCALE,{month:'short',year:'numeric'});
+const kr=n=>Math.round(n).toLocaleString('sv-SE')+' kr';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const o=n=>iso(addDays(T,n));
+const uid=()=>'i'+Math.random().toString(36).slice(2,9);
+const dur=n=>n<60?n+' d':n<730?Math.round(n/30.44)+' mo':(n/365.25).toFixed(1)+' yr';
+
+const svg=(p,s=14,sw=2)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const ICON={
+  lockSm:svg('<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',12),
+  download:svg('<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>'),
+  doc:svg('<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/>',22),
+  shield:svg('<path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6z"/><path d="m9 12 2 2 4-4"/>',18),
+  chev:svg('<path d="m6 9 6 6 6-6"/>',16,2.2),
+  tick:svg('<path d="m5 12 5 5 9-10"/>',16,2.4),
+  tickW:svg('<path d="m5 12 5 5 9-10"/>',12,3.2),
+  user:svg('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',18),
+};
+
+const STATUS={active:'Active',soon:'Ending soon',expired:'Expired',upcoming:'Upcoming'};
+const PLAN_NAME={free:'Free',pro:'Pro',family:'Family'};
+const STORAGE={
+  browser:{short:'This browser',paid:false,sub:'Encrypted, stays on this device'},
+  cloud:{short:'Löptid Cloud',paid:true,sub:'Encrypted, synced to your devices'},
+  gdrive:{short:'Google Drive',paid:true,sub:'Encrypted file in your Drive'},
+};
+const TEMPLATES=[
+  {name:'Pass (passport)',g:'g3',years:5,remind:[90,30],priv:true,hint:'Valid 5 years'},
+  {name:'ID-kort',g:'g3',years:5,remind:[60],hint:'Valid 5 years'},
+  {name:'Körkort (driving licence)',g:'g3',years:10,remind:[90],hint:'Photo card valid 10 years'},
+  {name:'Bilbesiktning',g:'g5',years:1,remind:[30,7],hint:'Car inspection, yearly'},
+  {name:'Hemförsäkring',g:'g4',years:1,cycle:'year',remind:[30],hint:'Home insurance, yearly'},
+  {name:'Elavtal',g:'g2',years:2,cycle:'month',notice:30,remind:[30,7],hint:'Electricity contract'},
+  {name:'Mobile plan',g:'g2',years:2,cycle:'month',notice:30,remind:[30],hint:'With bindningstid'},
+  {name:'Gym membership',g:'g1',years:1,cycle:'month',notice:30,remind:[30],hint:'Notice period'},
+  {name:'Free trial',g:'g1',days:30,cycle:'month',trial:true,remind:[2],hint:'Cancel before it converts'},
+  {name:'Product warranty',g:'g6',years:3,remind:[30],hint:'Reklamationsrätt, 3 years'},
+];
+
+function sample(){
+  const groups=[
+    {id:'g1',name:'Subscriptions',color:'#4f6db3'},
+    {id:'g2',name:'Contracts',color:'#c0643f'},
+    {id:'g3',name:'Documents',color:'#5e8f6e'},
+    {id:'g4',name:'Insurance',color:'#a8801c'},
+    {id:'g5',name:'Vehicle',color:'#8a5a9e'},
+    {id:'g6',name:'Warranties',color:'#3f8796'},
+  ];
+  const I=(id,g,name,periods,x={})=>({id,g,name,periods,cost:0,cycle:'none',notice:0,remind:[30],channels:['email'],priv:false,notes:'',trial:false,...x});
+  const items=[
+    I('i1','g1','Spotify Family',[{s:o(-420),e:null}],{cost:189,cycle:'month',remind:[3]}),
+    I('i2','g1','Netflix Standard',[{s:o(-260),e:null}],{cost:149,cycle:'month',remind:[3]}),
+    I('i3','g1','Viaplay free trial',[{s:o(-25),e:o(5)}],{cost:449,cycle:'month',remind:[2],trial:true,notes:'Converts to a paid plan unless cancelled.'}),
+    I('i4','g2','Elavtal (fixed price)',[{s:o(-690),e:o(40)}],{cost:620,cycle:'month',notice:30,remind:[30,7],notes:'Fixed-price electricity contract. Uppsägningstid 30 days.'}),
+    I('i5','g2','Mobile plan (24-month bindningstid)',[{s:o(-610),e:o(120)}],{cost:299,cycle:'month',notice:30,remind:[30]}),
+    I('i6','g2','Apartment lease (hyresavtal)',[{s:o(-1300),e:null}],{cost:11200,cycle:'month',notice:90,remind:[]}),
+    I('i7','g3','Pass (passport)',[{s:o(-1700),e:o(126)}],{remind:[90,30],priv:true,notes:'Book an appointment at the passport office.'}),
+    I('i8','g3','Körkort (driving licence)',[{s:o(-3000),e:o(650)}],{remind:[90]}),
+    I('i9','g3','ID-kort',[{s:o(-1846),e:o(-18)}],{remind:[60]}),
+    I('i10','g4','Hemförsäkring (home insurance)',[{s:o(-665),e:o(-300)},{s:o(-300),e:o(65)}],{cost:2350,cycle:'year',remind:[30]}),
+    I('i11','g4','Bilförsäkring (car insurance)',[{s:o(-200),e:o(165)}],{cost:5880,cycle:'year',remind:[30]}),
+    I('i12','g5','Bilbesiktning (car inspection)',[{s:o(-337),e:o(28)}],{remind:[30,7],notes:'Book a time at the inspection station.'}),
+    I('i13','g5','Fordonsskatt (vehicle tax)',[{s:o(-150),e:o(215)}],{cost:1440,cycle:'year',remind:[14]}),
+    I('i14','g6','Dishwasher – reklamationsrätt',[{s:o(-500),e:o(595)}],{remind:[30],notes:'Consumer complaint right: 3 years from purchase.'}),
+    I('i15','g6','Laptop warranty',[{s:o(-300),e:o(65)}],{remind:[30]}),
+  ];
+  return {v:1,groups,items,settings:{storage:'browser',plan:'free',signedIn:false,soon:30}};
+}
+function load(){try{const r=localStorage.getItem(STORE_KEY);if(r){const d=JSON.parse(r);if(d&&d.v===1&&Array.isArray(d.items))return d}}catch(e){}return null}
+function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(state))}catch(e){}}
+
+let state=load()||sample();
+const ui={view:'timeline',filter:'all',q:'',span:365,cal:new Date(T.getFullYear(),T.getMonth(),1),sort:'end',calSel:null,hidden:new Set(),collapsed:new Set(),open:null,menu:null,nextAll:false,adding:false,newName:''};
+let draft=null,pendingAfter=null;
+
+const grp=id=>state.groups.find(g=>g.id===id)||{name:'—',color:'#888888'};
+const cur=it=>it.periods[it.periods.length-1];
+function status(it){const p=cur(it),s=parse(p.s),e=parse(p.e);if(s>T){const prev=it.periods[it.periods.length-2];return prev&&parse(prev.s)<=T&&(!prev.e||parse(prev.e)>=T)?'active':'upcoming'}if(e&&e<T)return'expired';if(e&&diff(T,e)<=state.settings.soon)return'soon';return'active'}
+const noticeDate=it=>{const e=parse(cur(it).e);return it.notice&&e?addDays(e,-it.notice):null};
+const monthly=it=>{if(it.trial||status(it)==='expired')return 0;const c=+it.cost||0;return it.cycle==='month'?c:it.cycle==='year'?c/12:0};
+const pill=st=>`<span class="pill ${st}">${STATUS[st]}</span>`;
+
+function matchFilter(it,f){
+  const st=status(it),n=noticeDate(it),soon=state.settings.soon;
+  if(f==='upcoming')return st==='upcoming';
+  if(f==='active')return st==='active'||st==='soon';
+  if(f==='soon'){const nSoon=n&&diff(T,n)>=0&&diff(T,n)<=soon;return st==='soon'||!!nSoon}
+  if(f==='expired'){const e=parse(cur(it).e);return st==='expired'&&diff(e,T)<=120}
+  return true;
+}
+function searched(){const q=ui.q.trim().toLowerCase();return state.items.filter(it=>!q||(it.name+' '+(it.notes||'')+' '+grp(it.g).name).toLowerCase().includes(q))}
+function visible(){return searched().filter(it=>!ui.hidden.has(it.g)&&matchFilter(it,ui.filter))}
+
+/* ---------- Top bar ---------- */
+function renderTop(){
+  const s=state.settings;
+  document.querySelectorAll('.views [data-view]').forEach(b=>{if(b.dataset.view===ui.view)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+  const open=ui.menu==='acct';
+  $('#acctWrap').innerHTML=`<button class="avatar ${s.signedIn?'on':''}" data-act="acctmenu" aria-label="Account and settings" aria-haspopup="true" aria-expanded="${open}">${s.signedIn?'A':ICON.user}</button>
+  ${open?`<div class="menu">
+    <div class="menu-id">${s.signedIn?`<span class="av big">A</span><div><b>Demo user</b><small>${PLAN_NAME[s.plan]} plan</small></div>`:`<div><b>Not signed in</b><small>Your data stays in this browser</small></div>`}</div>
+    <button data-act="account">${s.signedIn?'Account':'Sign in'}<small>${s.signedIn?'Sign out, change plan':'For reminders, sync and billing'}</small></button>
+    <button data-act="storage">Storage &amp; privacy<small>Stored in: ${STORAGE[s.storage].short}</small></button>
+    <button data-act="upgrade">Plans<small>Current: ${PLAN_NAME[s.plan]}</small></button>
+    <hr><div class="menu-label">Export</div>
+    <button data-act="xlsx">Excel<small>Spreadsheet of the items in view</small></button>
+    <button data-act="pdf">PDF<small>Save the current view as a PDF</small></button>
+    <button data-act="print">Print<small>Print-friendly layout</small></button>
+    <button data-act="ics">Calendar file (.ics)<small>End dates and notice deadlines</small></button>
+    <button data-act="json">Backup (.json)<small>Everything, for restoring later</small></button>
+  </div>`:''}`;
+  $('#printDate').textContent=`Exported ${fmt(T)} · ${ui.view[0].toUpperCase()+ui.view.slice(1)} view`;
+}
+
+/* ---------- Heading ---------- */
+function renderHead(){
+  const its=state.items,spend=its.reduce((a,i)=>a+monthly(i),0);
+  const next30=its.reduce((a,i)=>a+[noticeDate(i),parse(cur(i).e)].filter(d=>d&&diff(T,d)>=0&&diff(T,d)<=30).length,0);
+  let ctrl='';
+  if(ui.view==='timeline'&&!cardsMode())ctrl=`<div class="seg" role="group" aria-label="Zoom">${[[182,'6 months','6 mo'],[365,'1 year','1 yr'],[1095,'3 years','3 yr']].map(([v,l,s])=>`<button data-zoom="${v}" aria-pressed="${ui.span===v}" aria-label="${l}"><span class="long" aria-hidden="true">${l}</span><span class="short" aria-hidden="true">${s}</span></button>`).join('')}</div>`;
+  else if(ui.view==='calendar'){
+    const away=ui.cal.getFullYear()!==T.getFullYear()||ui.cal.getMonth()!==T.getMonth();
+    ctrl=`<div class="calnav"><button class="navbtn" data-act="calprev" aria-label="Previous month">${svg('<path d="m15 6-6 6 6 6"/>',16,2.2)}</button><b><span class="long">${ui.cal.toLocaleDateString(LOCALE,{month:'long',year:'numeric'})}</span><span class="short">${ui.cal.toLocaleDateString(LOCALE,{month:'short',year:'numeric'})}</span></b><button class="navbtn" data-act="calnext" aria-label="Next month">${svg('<path d="m9 6 6 6-6 6"/>',16,2.2)}</button>${away?'<button class="btn" data-act="caltoday">Today</button>':''}</div>`;
+  }
+  else if(ui.view==='table'){
+    const open=ui.menu==='sort',curS=SORTS.find(x=>x[0]===ui.sort)||SORTS[0];
+    ctrl=`<div class="dd"><button class="ddbtn" data-act="sortmenu" aria-haspopup="true" aria-expanded="${open}">${svg('<path d="M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4"/>',16,2)}<span class="muted">Sort</span><span class="lbl">${curS[1]}</span>${ICON.chev}</button>
+    ${open?`<div class="ddmenu right" aria-label="Sort items" style="width:230px">${SORTS.map(([k,l])=>{const on=ui.sort===k;return `<button class="ddopt radio" data-sortkey="${k}" aria-pressed="${on}"><span class="tick">${on?ICON.tick:''}</span><span class="fill">${l}</span></button>`}).join('')}</div>`:''}</div>`;
+  }
+  $('#head').innerHTML=`<h1>${ui.view[0].toUpperCase()+ui.view.slice(1)}</h1><div class="ctrl">${ctrl}</div>
+  <p class="summary">${its.length} items · ${next30} date${next30===1?'':'s'} in the next 30 days · ${kr(spend)} a month</p>`;
+}
+
+/* ---------- Next up ---------- */
+function nextUpEvents(){
+  const ev=[],soon=state.settings.soon;
+  for(const it of state.items){
+    const e=parse(cur(it).e),n=noticeDate(it);
+    if(n){const dd=diff(T,n);if(dd>=0&&dd<=60)ev.push({it,dd,d:n,kind:'Notice deadline',tone:'warn'})}
+    if(e){const dd=diff(T,e);
+      if(dd>=0&&dd<=60)ev.push({it,dd,d:e,kind:it.trial?'Trial converts':'Ends',tone:dd<=soon?'warn':'ok'});
+      else if(dd<0&&dd>=-30)ev.push({it,dd,d:e,kind:'Expired',tone:'danger'});
+    }
+  }
+  return ev.sort((a,b)=>((a.dd<0)-(b.dd<0))||(Math.abs(a.dd)-Math.abs(b.dd))).slice(0,8);
+}
+function renderNextUp(){
+  const ev=nextUpEvents(),MIN=4;
+  if(!ev.length){$('#nextup').innerHTML='';return}
+  const shown=ui.nextAll?ev:ev.slice(0,MIN);
+  $('#nextup').innerHTML=`<div class="nu-head"><div><h2 class="eyebrow" id="nextupTitle">Next up</h2><small>Next 60 days and recently expired</small></div>
+  ${ev.length>MIN?`<button class="btn sm" data-act="nextall" aria-expanded="${ui.nextAll}">${ui.nextAll?'Show fewer':'Show all '+ev.length}</button>`:''}</div>
+  <div class="nu">${shown.map(x=>{const a=Math.abs(x.dd);
+    const unit=x.dd===0?'':x.dd<0?(a===1?'day ago':'days ago'):x.kind==='Notice deadline'?(a===1?'day to cancel':'days to cancel'):(a===1?'day left':'days left');
+    return `<button class="nucard" data-next="${x.it.id}"><span class="top"><span class="tone ${x.tone}">${x.kind}</span><i class="dot" style="--c:${grp(x.it.g).color}"></i></span>
+    <span class="num"><span class="big">${x.dd===0?'Today':a}</span><span class="unit">${unit}</span></span>
+    <span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span class="nm">${esc(x.it.priv?'Private item':x.it.name)}</span><span class="dt">${fmt(x.d)}</span></span></button>`}).join('')}</div>`;
+}
+
+/* ---------- Filters ---------- */
+const FILTERS=[['all','All items'],['soon','Ending soon'],['active','Active'],['upcoming','Upcoming'],['expired','Recently expired']];
+function renderFilters(){
+  const base=searched(),vis=visible(),cur=FILTERS.find(f=>f[0]===ui.filter)||FILTERS[0];
+  const onG=state.groups.filter(g=>!ui.hidden.has(g.id)),allOn=onG.length===state.groups.length;
+  const sOpen=ui.menu==='status',gOpen=ui.menu==='groups';
+  $('#filters').innerHTML=`
+  <div class="dd">
+    <button class="ddbtn ${ui.filter!=='all'?'active':''}" data-act="statusmenu" aria-haspopup="true" aria-expanded="${sOpen}"><span class="muted">Show</span><span class="lbl">${ui.filter==='all'?'All':cur[1]}</span><span class="cnt">${vis.length}</span>${ICON.chev}</button>
+    ${sOpen?`<div class="ddmenu" aria-label="Show items">${FILTERS.map(([k,l])=>{const on=ui.filter===k;return `<button class="ddopt radio" data-filter="${k}" aria-pressed="${on}"><span class="tick">${on?ICON.tick:''}</span><span class="fill">${l}</span><span class="cnt">${base.filter(it=>!ui.hidden.has(it.g)&&matchFilter(it,k)).length}</span></button>`}).join('')}</div>`:''}
+  </div>
+  <div class="dd" style="flex:none">
+    <button class="ddbtn ${allOn?'':'active'}" data-act="groupmenu" aria-haspopup="true" aria-expanded="${gOpen}"><span class="lbl">Groups</span><span class="dots" aria-hidden="true">${onG.map(g=>`<i style="--c:${g.color}"></i>`).join('')}</span><span class="cnt">${allOn?'All':onG.length?onG.length+' of '+state.groups.length:'None'}</span>${ICON.chev}</button>
+    ${gOpen?`<div class="ddmenu right" aria-label="Groups to show">${state.groups.map(g=>{const on=!ui.hidden.has(g.id);return `<button class="ddopt" data-group="${g.id}" aria-pressed="${on}"><span class="box" style="${on?`background:${g.color};border-color:${g.color}`:''}">${on?ICON.tickW:''}</span><span class="fill">${esc(g.name)}</span><span class="cnt">${base.filter(it=>it.g===g.id).length}</span></button>`}).join('')}
+      ${ui.adding?`<div class="ngform"><label for="newGroupName">New group</label><div class="ngrow"><i class="dot" style="--c:${nextColor()}" aria-hidden="true"></i><input id="newGroupName" type="text" placeholder="e.g. Pets" autocomplete="off" value="${esc(ui.newName)}"><button class="btn primary" data-act="ngcreate">Create</button></div><button class="linkbtn" data-act="ngcancel">Cancel</button></div>`
+        :`<button class="ddopt add" data-act="ngstart"><span class="box">${svg('<path d="M12 5v14M5 12h14"/>',12,3)}</span><span class="fill">New group</span></button>`}
+      <button class="ddopt" data-act="groups"><span class="tick">✎</span><span class="fill">Edit groups…</span></button>
+      <div class="ddfoot"><button class="btn" data-act="groupsall">Show all</button><button class="btn primary" data-act="closemenu">Done</button></div></div>`:''}
+  </div>`;
+}
+const emptyHtml=()=>`<div class="empty"><p>No items match these filters.</p><button class="btn" data-act="clearfilters">Clear filters</button></div>`;
+
+/* ---------- Timeline ---------- */
+function renderTimeline(items){
+  const span=ui.span,start=addDays(T,-Math.round(span*.25)),end=addDays(T,Math.round(span*.75)),tot=diff(start,end),soon=state.settings.soon;
+  const pct=d=>Math.max(0,Math.min(100,diff(start,d)/tot*100)),P=n=>n.toFixed(3)+'%';
+  const every=span>700?6:span>200?2:1,ticks=[];
+  let m=new Date(start.getFullYear(),start.getMonth()+1,1);
+  while(m<=end){ticks.push(m);m=new Date(m.getFullYear(),m.getMonth()+1,1)}
+  const vt=ticks.map(x=>`<i class="vtick" style="left:${P(pct(x))}"></i>`).join('')+`<i class="tline" style="left:${P(pct(T))}"></i>`;
+  const axis=`<div class="axis"><div class="lane"><div class="lab">${fmtM(start)} – ${fmtM(end)}</div><div class="trk">${ticks.map(x=>`<i class="mtick" style="left:${P(pct(x))}"></i>${x.getMonth()%every===0?`<i class="mlab" style="left:${P(pct(x))}">${x.getMonth()===0?x.getFullYear():x.toLocaleDateString(LOCALE,{month:'short'})}</i>`:''}`).join('')}<span class="tpill" style="left:${P(pct(T))}">Today</span></div></div></div>`;
+
+  const row=(it,g)=>{
+    const st=status(it),c=g.color,p=cur(it),ps=parse(p.s),pe=parse(p.e),n=noticeDate(it),isOpen=ui.open===it.id;
+    let tag,tone;
+    if(st==='upcoming'){tag='Starts in '+dur(diff(T,ps));tone='mute'}
+    else if(st==='expired'){tag=dur(diff(pe,T))+' ago';tone='danger'}
+    else if(!pe){tag='Ongoing';tone='mute'}
+    else{const tg=n&&n>=T?n:pe,dd=diff(T,tg);tag=dd===0?'Today':dur(dd);tone=dd<=soon?'warn':'ok'}
+    const parts=[];
+    if(st==='expired')parts.push('Expired '+fmt(pe));
+    else if(!pe)parts.push('Ongoing since '+fmtM(ps));
+    else{if(n&&n>=T)parts.push('Notice by '+fmtS(n));parts.push((it.trial?'Converts ':'Ends ')+fmt(pe))}
+    if(it.cost&&it.cycle!=='none')parts.push(kr(it.cost)+(it.cycle==='month'?'/mo':'/yr'));
+    let bars='';
+    it.periods.forEach((q,idx)=>{
+      const qs=parse(q.s),qe=parse(q.e),last=idx===it.periods.length-1,e2=qe||end;
+      if(e2<start||qs>end)return;
+      const l=pct(qs),w=Math.max(.8,pct(e2)-l);
+      let bg=c+'33',border='1px solid '+c+'73',fill=0,op=1,ring='none';
+      if(!last){bg=c+'40';border='0';op=.55}
+      else if(st==='expired'){bg=`repeating-linear-gradient(135deg,${c}66 0 5px,${c}1f 5px 10px)`;border='1px solid '+c+'80';op=.85}
+      else{const el=T<qs?qs:(qe&&qe<T?qe:T);fill=Math.max(0,Math.min(100,(pct(el)-l)/w*100));
+        if(!qe){bg=`linear-gradient(90deg,${c}40 55%,${c}00)`;border='0'}
+        if(st==='soon')ring='0 0 0 2px var(--surface),0 0 0 3.5px var(--warn)'}
+      bars+=`<span class="pbar" style="left:${P(l)};width:${P(Math.min(w,100-l))};background:${bg};border:${border};box-shadow:${ring};opacity:${op}" title="${esc(it.name)}: ${fmt(qs)} – ${qe?fmt(qe):'no end date'}"><i style="width:${P(fill)};background:${c}"></i></span>`;
+    });
+    const dia=n&&n>=start&&n<=end&&st!=='expired'?`<span class="ndia" style="left:${P(pct(n))}" title="Notice deadline ${fmt(n)}"></span>`:'';
+    let det='';
+    if(isOpen){
+      let prog='';
+      if(pe&&st!=='expired'&&st!=='upcoming'){const td=Math.max(1,diff(ps,pe)),pc=Math.min(100,Math.round(Math.max(0,diff(ps,T))/td*100)),left=diff(T,pe);
+        prog=`<div><div class="prog-top"><b>${pc}% of this period has passed</b><span class="muted">${left===0?'Ends today':left+' of '+td+' days left'}</span></div><div class="prog"><i style="width:${pc}%;background:${c}"></i></div></div>`}
+      const nw=n&&n>=T&&diff(T,n)<=soon;
+      const facts=[
+        ['Status',STATUS[st],st==='expired'?'d':st==='soon'?'w':''],
+        ['Started',fmt(ps),''],
+        [it.trial?'Converts':'Ends',pe?fmt(pe):'No end date',''],
+        ['Notice by',n?fmt(n):'No notice period',nw?'w':''],
+        ['Cost',it.cost?kr(it.cost)+(it.cycle==='month'?' / month':it.cycle==='year'?' / year':''):'—',''],
+        ['Reminders',it.remind.length?[...it.remind].sort((a,b)=>b-a).map(x=>x+' d').join(', ')+' before':'Off',''],
+      ];
+      det=`<div class="det">${prog}<dl class="facts">${facts.map(([k,v,cl])=>`<div><dt>${k}</dt><dd class="${cl}">${esc(v)}</dd></div>`).join('')}</dl>
+      ${it.notes?`<p class="dnotes">${esc(it.notes)}</p>`:''}
+      ${detBtns(it.id)}</div>`;
+    }
+    return `<div class="row ${isOpen?'open':''}" id="row-${it.id}"><button class="rowbtn" data-row="${it.id}" aria-expanded="${isOpen}"><span class="lane">
+      <span class="lab"><span class="rtext"><span class="rname">${it.priv?`<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Private item"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`:''}<span>${esc(it.name)}</span></span><span class="rsub">${esc(parts.join(' · '))}</span></span><span class="tag ${tone}">${tag}</span></span>
+      <span class="trk">${vt}${bars}${dia}</span></span></button>${det}</div>`;
+  };
+
+  let body='';
+  for(const g of state.groups){
+    const gi=items.filter(i=>i.g===g.id);if(!gi.length)continue;
+    const col=ui.collapsed.has(g.id),sp=gi.reduce((a,i)=>a+monthly(i),0);
+    body+=`<div><button class="ghead" data-collapse="${g.id}" aria-expanded="${!col}">${ICON.chev}<i class="dot" style="--c:${g.color}"></i><b>${esc(g.name)}</b><span class="small muted">${gi.length} item${gi.length===1?'':'s'}</span><span class="small muted gsp">${sp?kr(sp)+' / month':''}</span></button>${col?'':gi.map(it=>row(it,g)).join('')}</div>`;
+  }
+  return `<div class="tl">${axis}${body||emptyHtml()}</div>
+  <div class="legend" style="margin-top:14px"><span><i class="lg passed"></i>Time passed</span><span><i class="lg left"></i>Time left</span><span><i class="lg soon"></i>Ending soon</span><span><i class="lg dia"></i>Notice deadline (last day to cancel)</span><span><i class="lg exp"></i>Expired</span><span><i class="lg today"></i>Today</span><span>${ICON.lockSm} Private item</span></div>`;
+}
+
+/* ---------- Item details (shared by Timeline and Table) ---------- */
+const detBtns=id=>`<div class="detbtns"><div>
+  <button class="btn neutral" data-row="${id}">${svg('<path d="M6 6l12 12M18 6 6 18"/>',15,2.2)}Close</button>
+  <button class="btn soft" data-renew="${id}" title="Start the next period">${svg('<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 5v6h-6"/>',15,2.2)}Renew</button>
+  <button class="btn primary" data-open="${id}">${svg('<path d="M4 20h4L19 9l-4-4L4 16z"/>',15,2.2)}Edit details</button></div></div>`;
+function progressHtml(it){
+  const st=status(it),p=cur(it),ps=parse(p.s),pe=parse(p.e),c=grp(it.g).color;
+  if(!pe||st==='expired'||st==='upcoming')return'';
+  const td=Math.max(1,diff(ps,pe)),pc=Math.min(100,Math.round(Math.max(0,diff(ps,T))/td*100)),left=diff(T,pe);
+  return `<div><div class="prog-top"><b>${pc}% of this period has passed</b><span class="muted">${left===0?'Ends today':left+' of '+td+' days left'}</span></div><div class="prog"><i style="width:${pc}%;background:${c}"></i></div></div>`;
+}
+
+/* ---------- Timeline as cards (alt variant on phones) ---------- */
+function tagInfo(it){
+  const st=status(it),p=cur(it),ps=parse(p.s),pe=parse(p.e),n=noticeDate(it),soon=state.settings.soon;
+  if(st==='upcoming')return{tag:'Starts in '+dur(diff(T,ps)),tone:'mute'};
+  if(st==='expired')return{tag:dur(diff(pe,T))+' ago',tone:'danger'};
+  if(!pe)return{tag:'Ongoing',tone:'mute'};
+  const tg=n&&n>=T?n:pe,dd=diff(T,tg);return{tag:dd===0?'Today':dur(dd),tone:dd<=soon?'warn':'ok'};
+}
+function renderTimelineCards(items){
+  let body='';
+  for(const g of state.groups){
+    const gi=items.filter(i=>i.g===g.id);if(!gi.length)continue;
+    const col=ui.collapsed.has(g.id),sp=gi.reduce((a,i)=>a+monthly(i),0);
+    body+=`<div class="tc-group"><button class="tc-ghead" data-collapse="${g.id}" aria-expanded="${!col}">${ICON.chev}<i class="dot" style="--c:${g.color}"></i><b>${esc(g.name)}</b><span class="small muted">${gi.length} item${gi.length===1?'':'s'}</span><span class="small muted gsp">${sp?kr(sp)+' / month':''}</span></button>${col?'':gi.map(it=>tcard(it,g)).join('')}</div>`;
+  }
+  return `<div class="tcards">${body||`<div class="tcard">${emptyHtml()}</div>`}</div>`;
+}
+function tcard(it,g){
+  const st=status(it),p=cur(it),ps=parse(p.s),pe=parse(p.e),n=noticeDate(it),open=ui.open===it.id,soon=state.settings.soon;
+  const {tag,tone}=tagInfo(it),nw=n&&n>=T&&diff(T,n)<=soon;
+  const cost=it.cost?kr(it.cost)+(it.cycle==='month'?'/mo':it.cycle==='year'?'/yr':''):'—';
+  let mid='';
+  if(pe&&st!=='expired'&&st!=='upcoming'){const td=Math.max(1,diff(ps,pe)),pc=Math.min(100,Math.round(Math.max(0,diff(ps,T))/td*100)),left=diff(T,pe);
+    mid=`<span class="tc-prog" aria-hidden="true"><span class="bar"><i style="width:${pc}%;background:${g.color}"></i></span><span class="cap"><span>${pc}% of period passed</span><span>${left===0?'Ends today':left+' days left'}</span></span></span>`}
+  else if(st==='expired'||st==='upcoming')mid=`<span class="tc-state ${st==='expired'?'exp':''}" aria-hidden="true">${st==='expired'?'Expired '+fmt(pe):'Starts '+fmt(ps)}</span>`;
+  const aria=`${it.name}, ${g.name}, ${STATUS[st]}, ${tag}, ends ${pe?fmt(pe):'never'}${n?', notice by '+fmt(n):''}`;
+  return `<div class="tc ${st} ${open?'open':''}" id="row-${it.id}"><button class="tcbtn" data-row="${it.id}" aria-expanded="${open}" aria-label="${esc(aria)}">
+    <span class="tc-top" aria-hidden="true"><span class="tc-name"><b>${it.priv?ICON.lockSm:''}<span class="ell">${esc(it.name)}</span></b><span class="tc-meta">${pill(st)}${esc(g.name)}</span></span><span class="tag ${tone}">${tag}</span></span>
+    ${mid}
+    <span class="mfacts" aria-hidden="true" style="margin-left:0"><span><small>Started</small><b>${fmt(ps)}</b></span><span><small>Ends</small><b class="${pe?'':'mute-t'}">${pe?fmt(pe):'Ongoing'}</b></span><span><small>Notice by</small><b class="${nw?'warn-t':n?'':'mute-t'}">${n?fmt(n):'—'}</b></span><span><small>Cost</small><b class="${it.cost?'':'mute-t'}">${cost}</b></span></span>
+  </button>${open?`<div class="det"><p class="dnotes">Reminders: <b>${it.remind.length?[...it.remind].sort((a,b)=>b-a).map(x=>x+' days').join(', ')+' before':'Off'}</b></p>${it.notes?`<p class="dnotes">${esc(it.notes)}</p>`:''}${detBtns(it.id)}</div>`:''}</div>`;
+}
+
+/* ---------- Table ---------- */
+const SORTS=[['end','End date'],['notice','Notice deadline'],['name','Name'],['status','Status'],['cost','Cost per month']];
+function renderTable(items){
+  if(!items.length)return `<div class="tcard">${emptyHtml()}</div>`;
+  const soon=state.settings.soon,BIG=9e15;
+  const val={
+    end:it=>parse(cur(it).e)?.getTime()??BIG,
+    notice:it=>{const n=noticeDate(it);return n&&n>=T?n.getTime():BIG},
+    name:it=>it.name.toLowerCase(),
+    status:it=>['soon','active','upcoming','expired'].indexOf(status(it)),
+    cost:it=>-monthly(it)
+  }[ui.sort]||(()=>0);
+  const sorted=[...items].sort((a,b)=>{const x=val(a),y=val(b);return x>y?1:x<y?-1:0});
+  return `<div class="tcard"><div class="tgrid thead"><span>Item</span><span>Group</span><span>Status</span><span>Ends</span><span>Notice by</span><span>Cost</span><span>Reminders</span></div>${sorted.map(it=>{
+    const g=grp(it.g),st=status(it),e=parse(cur(it).e),n=noticeDate(it),open=ui.open===it.id,nw=n&&n>=T&&diff(T,n)<=soon;
+    const ends=e?fmt(e):'Ongoing',notice=n?fmt(n):'—';
+    const cost=it.cost?kr(it.cost)+(it.cycle==='month'?'/mo':it.cycle==='year'?'/yr':''):'—';
+    const rem=it.remind.length?[...it.remind].sort((a,b)=>b-a).map(x=>x+'d').join(', '):'Off';
+    const ce=e?'':'mute-t',cn=nw?'warn-t':n?'':'mute-t',cc=it.cost?'':'mute-t',cr=it.remind.length?'':'mute-t';
+    const lock=it.priv?ICON.lockSm:'';
+    const aria=`${it.name}, ${g.name}, ${STATUS[st]}, ends ${e?fmt(e):'never'}${n?', notice by '+fmt(n):''}${it.cost?', '+cost:''}`;
+    return `<div class="trow ${open?'open':''}" id="row-${it.id}"><button class="trowbtn" data-row="${it.id}" aria-expanded="${open}" aria-label="${esc(aria)}">
+      <span class="tgrid" aria-hidden="true"><span class="tname">${lock}<span class="ell">${esc(it.name)}</span></span><span class="gtag ell"><i class="dot" style="--c:${g.color}"></i><span class="ell">${esc(g.name)}</span></span><span>${pill(st)}</span><span class="ell ${ce}">${ends}</span><span class="ell ${cn}">${notice}</span><span class="ell ${cc}">${cost}</span><span class="ell ${cr}">${rem}</span></span>
+      <span class="mcard" aria-hidden="true"><span class="mtop"><i class="dot" style="--c:${g.color}"></i><span class="mname"><b>${lock}<span class="ell">${esc(it.name)}</span></b><small>${esc(g.name)}</small></span>${pill(st)}</span>
+      <span class="mfacts"><span><small>Ends</small><b class="${ce}">${ends}</b></span><span><small>Notice by</small><b class="${cn}">${notice}</b></span><span><small>Cost</small><b class="${cc}">${cost}</b></span><span><small>Reminders</small><b class="${cr}">${rem}</b></span></span></span>
+    </button>${open?`<div class="det">${progressHtml(it)}<p class="trem dnotes">Reminders: <b>${it.remind.length?[...it.remind].sort((a,b)=>b-a).map(x=>x+' days').join(', ')+' before':'Off'}</b></p>${it.notes?`<p class="dnotes">${esc(it.notes)}</p>`:''}${detBtns(it.id)}</div>`:''}</div>`;
+  }).join('')}</div>`;
+}
+
+/* ---------- Calendar ---------- */
+const DOW=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+function renderCalendar(items){
+  const y=ui.cal.getFullYear(),mo=ui.cal.getMonth(),first=new Date(y,mo,1),lead=(first.getDay()+6)%7,dim=new Date(y,mo+1,0).getDate();
+  const cells=Math.ceil((lead+dim)/7)*7,gridStart=addDays(first,-lead),soon=state.settings.soon;
+  const evs={},put=(d,ev)=>{if(d.getMonth()!==mo||d.getFullYear()!==y)return;(evs[iso(d)]??=[]).push(ev)};
+  for(const it of items){
+    const g=grp(it.g),p=cur(it),e=parse(p.e),n=noticeDate(it),st=status(it);
+    if(e){const dd=diff(T,e);put(e,{it,g,rank:1,kind:st==='expired'?'Expired':it.trial?'Trial converts':'Ends',chip:(st==='expired'?'Expired ':'Ends ')+it.name,tone:st==='expired'?'danger':dd>=0&&dd<=soon?'warn':'ok'})}
+    if(n)put(n,{it,g,rank:0,kind:'Notice deadline',chip:'Notice: '+it.name,tone:'warn',notice:true});
+    if(it.cycle==='month'&&!it.trial&&it.cost){const s=parse(p.s),bd=new Date(y,mo,Math.min(s.getDate(),dim));if(bd>=s&&(!e||bd<e))put(bd,{it,g,rank:2,kind:'Billed '+kr(it.cost),chip:'Billed '+it.name,tone:'mute'})}
+  }
+  Object.values(evs).forEach(l=>l.sort((a,b)=>a.rank-b.rank));
+  const focusKey=ui.calSel&&parse(ui.calSel).getMonth()===mo?ui.calSel:(T.getMonth()===mo&&T.getFullYear()===y?iso(T):iso(first));
+  let days='';
+  for(let i=0;i<cells;i++){
+    const d=addDays(gridStart,i),k=iso(d),l=evs[k]||[],sel=ui.calSel===k;
+    const label=d.toLocaleDateString(LOCALE,{weekday:'long',day:'numeric',month:'long'})+(l.length?`, ${l.length} date${l.length===1?'':'s'}`:'');
+    days+=`<button class="day ${d.getMonth()!==mo?'out':''} ${diff(T,d)===0?'today':''}" data-day="${k}" aria-pressed="${sel}" aria-label="${esc(label)}" tabindex="${k===focusKey?0:-1}"><span class="dn">${d.getDate()}</span><span class="chips" aria-hidden="true">${l.slice(0,3).map(ev=>`<span class="chip ${ev.notice?'notice':''}" style="--c:${ev.g.color}">${esc(ev.chip)}</span>`).join('')}${l.length>3?`<span class="more"><span class="long">+${l.length-3} more</span><span class="short">+${l.length-3}</span></span>`:''}</span></button>`;
+  }
+  const keys=Object.keys(evs).sort().filter(k=>!ui.calSel||k===ui.calSel);
+  const sd=ui.calSel?parse(ui.calSel):null,mname=first.toLocaleDateString(LOCALE,{month:'long'});
+  const agenda=keys.map(k=>{const d=parse(k),isT=diff(T,d)===0;
+    return `<div class="ag-day"><div class="ag-date"><b style="color:${isT?'var(--danger)':d<T?'var(--ink-2)':'var(--ink)'}">${d.toLocaleDateString(LOCALE,{day:'numeric',month:'short'})}</b><small>${isT?'Today':d.toLocaleDateString(LOCALE,{weekday:'long'})}</small></div>
+    <div class="ag-items">${evs[k].map(ev=>`<button class="ag-item" data-agenda="${ev.it.id}"><i class="dot" style="--c:${ev.g.color}"></i><span class="txt"><b class="ell">${esc(ev.it.name)}</b><small class="ell">${esc(ev.g.name)}${ev.notice?' · last day to cancel':''}</small></span><span class="tag ${ev.tone}">${esc(ev.kind)}</span></button>`).join('')}</div></div>`}).join('');
+  return `<div class="calwrap"><div class="tcard"><div class="calgrid">${DOW.map(x=>`<div class="dow">${x}</div>`).join('')}</div><div class="calgrid">${days}</div></div>
+  <div class="tcard"><div class="ag-head"><div><h2>${sd?sd.toLocaleDateString(LOCALE,{weekday:'long',day:'numeric',month:'long'}):'All of '+mname}</h2><small>${sd?'Dates due on this day':'Tap a day to see only that day'}</small></div>${sd?'<button class="btn sm" data-act="calclear">Whole month</button>':''}</div>
+  ${agenda||`<p class="ag-empty">${sd?'Nothing due on this day.':'Nothing due this month.'}</p>`}</div></div>`;
+}
+
+const FOCUS_KEYS=['row','open','renew','view','zoom','filter','group','collapse','day','sortkey','next','agenda','tpl','act'];
+function preserveFocus(fn){
+  const a=document.activeElement;let sel=null;
+  if(a&&a!==document.body&&a.dataset&&!a.closest('dialog')){for(const k of FOCUS_KEYS){if(a.dataset[k]!=null){sel=`[data-${k}="${a.dataset[k]}"]`;break}}}
+  fn();
+  if(sel&&(!a.isConnected||document.activeElement===document.body)){const el=document.querySelector(sel);if(el)el.focus({preventScroll:true})}
+}
+let lastLive='';
+function announce(msg){const l=$('#live');if(!l||msg===lastLive)return;lastLive=msg;l.textContent=msg}
+function render(){
+  preserveFocus(()=>{
+    renderTop();renderHead();renderNextUp();renderFilters();
+    const items=visible();
+    $('#view').innerHTML=ui.view==='timeline'?(cardsMode()?renderTimelineCards(items):renderTimeline(items)):ui.view==='table'?renderTable(items):renderCalendar(items);
+    if(render.ready)announce(`${items.length} item${items.length===1?'':'s'} shown`);
+  });
+  render.ready=true;
+}
+phoneMQ.addEventListener&&phoneMQ.addEventListener('change',()=>{if(VARIANT==='alt')render()});
+
+/* ---------- Item drawer ---------- */
+function newItem(t={}){
+  const end=t.days?addDays(T,t.days):t.years?addDays(T,Math.round(t.years*365.25)):addDays(T,365);
+  return{id:uid(),g:state.groups.some(x=>x.id===t.g)?t.g:state.groups[0].id,name:t.name||'',periods:[{s:iso(T),e:iso(end)}],cost:t.cost||0,cycle:t.cycle||'none',notice:t.notice||0,remind:t.remind||[30],channels:['email'],priv:!!t.priv,notes:t.notes||'',trial:!!t.trial};
+}
+function openDrawer(id,tpl){
+  const isNew=!id,it=isNew?newItem(tpl):structuredClone(state.items.find(i=>i.id===id));
+  if(!it)return;
+  ui.menu=null;
+  draft={it,isNew};
+  const p=cur(it),free=state.settings.plan==='free';
+  $('#drawer').innerHTML=`
+  <div class="dhead"><div><small class="muted">${isNew?'New item':esc(grp(it.g).name)}</small><h2 id="drawerTitle">${isNew?'Add item':esc(it.name)}</h2></div><button class="icon-btn" data-act="closedrawer" aria-label="Close">✕</button></div>
+  <form id="itemForm" class="dform" novalidate>
+    <label class="field"><span>Name</span><input name="name" value="${esc(it.name)}" placeholder="e.g. Hemförsäkring" autocomplete="off"></label>
+    <label class="field"><span>Group</span><select name="g">${groupOptions(it.g)}</select></label>
+    <div class="newgrp" hidden><input name="newg" placeholder="New group name, e.g. Pets" autocomplete="off"><button type="button" class="btn" data-act="createg">Create</button></div>
+    <div class="row2"><label class="field"><span>Start date</span><input type="date" name="s" value="${p.s}"></label><label class="field"><span>End or renewal date</span><input type="date" name="e" value="${p.e||''}" ${p.e?'':'disabled'}></label></div>
+    <label class="check"><input type="checkbox" name="open" ${p.e?'':'checked'}> No end date (ongoing)</label>
+    ${it.periods.length>1?`<div class="hist"><span>Earlier periods</span>${it.periods.slice(0,-1).map(q=>`<div>${fmt(parse(q.s))} – ${fmt(parse(q.e))}</div>`).join('')}</div>`:''}
+    <div class="row2"><label class="field"><span>Cost (kr)</span><input type="number" min="0" name="cost" value="${it.cost||''}" placeholder="0"></label><label class="field"><span>Billing</span><select name="cycle">${[['none','One-off / none'],['month','Monthly'],['year','Yearly']].map(([v,l])=>`<option value="${v}" ${it.cycle===v?'selected':''}>${l}</option>`).join('')}</select></label></div>
+    <label class="field"><span>Notice period (uppsägningstid), in days</span><input type="number" min="0" name="notice" value="${it.notice||''}" placeholder="0"><small>We remind you before the last day you can cancel, not only before the end date.</small></label>
+    <fieldset class="field"><legend>Remind me</legend><div class="chips">${[90,30,14,7,1].map(x=>`<label class="chip-check"><input type="checkbox" name="remind" value="${x}" ${it.remind.includes(x)?'checked':''}><span>${x} day${x===1?'':'s'} before</span></label>`).join('')}</div></fieldset>
+    <fieldset class="field"><legend>Send by</legend><div class="chips">${[['email','Email',0],['push','Push',1],['sms','SMS',1]].map(([v,l,pro])=>`<label class="chip-check"><input type="checkbox" name="ch" value="${v}" ${it.channels.includes(v)?'checked':''}><span>${l}${pro&&free?' <em class="pro">Pro</em>':''}</span></label>`).join('')}</div></fieldset>
+    <label class="toggle"><input type="checkbox" name="priv" ${it.priv?'checked':''}><span class="sw"></span><span><b>Private item</b><small>Reminders won't name this item. Our server stores only the date.</small></span></label>
+    <div class="preview" id="preview"></div>
+    <label class="field"><span>Notes</span><textarea name="notes" rows="3">${esc(it.notes)}</textarea></label>
+    <div class="drop">${ICON.doc}<div><b>Attach the policy, contract or receipt</b><small>${free?'<em class="pro">Pro</em> ':''}Files are encrypted on your device. You can also share a PDF to Löptid from your phone, and it reads the dates for you.</small></div></div>
+    <div class="dactions">${isNew?'':`<button type="button" class="btn danger-ghost" data-act="delete">Delete</button><button type="button" class="btn ghost" data-act="renew" title="Adds the next period">Renewed</button>`}<span class="sp"></span><button type="button" class="btn ghost" data-act="closedrawer">Cancel</button><button type="submit" class="btn primary">${isNew?'Add item':'Save'}</button></div>
+  </form>`;
+  const dr=$('#drawer');if(!dr.open){openers.drawer=remember();dr.showModal()}dr.scrollTop=0;syncLock();
+  const f=$('#itemForm'),E=f.elements;
+  f.addEventListener('input',()=>{readForm(f);updatePreview()});
+  f.addEventListener('change',ev=>{
+    const t=ev.target;
+    if(t.name==='g'){const row=f.querySelector('.newgrp');if(t.value==='__new'){row.hidden=false;E.namedItem('newg').focus();return}row.hidden=true}
+    if(t.name==='newg')return;
+    if(t.name==='open'){E.namedItem('e').disabled=t.checked;if(!t.checked&&!E.namedItem('e').value)E.namedItem('e').value=iso(addDays(parse(E.namedItem('s').value)||T,365))}
+    if(t.name==='ch'&&t.checked&&t.value!=='email'&&state.settings.plan==='free'){t.checked=false;upgradeModal('Push and SMS reminders are part of Pro.')}
+    readForm(f);updatePreview();
+  });
+  f.addEventListener('submit',ev=>{
+    ev.preventDefault();const x=readForm(f);
+    const errs=validate(f);if(errs.length){errs[0].focus();announce(errs.length===1?'1 field needs attention':errs.length+' fields need attention');return}
+    const wasNew=draft.isNew;commit(x,wasNew);closeDrawer();toast(wasNew?`Added ${x.name}.`:'Saved.');
+  });
+  updatePreview();
+  if(isNew)setTimeout(()=>E.namedItem('name').focus(),60);
+  render();
+}
+function readForm(f){
+  const it=draft.it,fd=new FormData(f),E=f.elements,p=cur(it);
+  it.name=(fd.get('name')||'').trim();if(fd.get('g')!=='__new')it.g=fd.get('g');
+  p.s=fd.get('s')||iso(T);p.e=E.namedItem('open').checked?null:(fd.get('e')||null);
+  it.cost=+fd.get('cost')||0;it.cycle=fd.get('cycle');it.notice=+fd.get('notice')||0;
+  it.remind=fd.getAll('remind').map(Number);it.channels=fd.getAll('ch');it.priv=E.namedItem('priv').checked;it.notes=fd.get('notes')||'';
+  return it;
+}
+function updatePreview(){
+  const it=draft.it,el=$('#preview');if(!el)return;
+  const e=parse(cur(it).e),n=noticeDate(it),target=n&&n>=T?n:e,name=it.name||'This item';
+  const head='<div class="pv-head">Reminder preview</div>';
+  if(!target){el.innerHTML=`${head}<p class="muted small">No end date, so there's nothing to remind you about. Add an end date or a notice period.</p>`;return}
+  if(!it.remind.length){el.innerHTML=`${head}<p class="muted small">Reminders are off for this item.</p>`;return}
+  if(!it.channels.length){el.innerHTML=`${head}<p class="muted small">Choose at least one way to send reminders.</p>`;return}
+  const leads=[...it.remind].sort((a,b)=>b-a),future=leads.find(l=>addDays(target,-l)>=T);
+  const sendOn=future!==undefined?addDays(target,-future):(target>=T?T:addDays(target,-leads[0]));
+  const lead=Math.max(0,diff(sendOn,target)),isNotice=target===n,what=isNotice?'notice period closes':'expires';
+  const subj=it.priv?'1 item needs your attention':`${name}: ${what} ${fmt(target)}`;
+  const body=it.priv?`Something you track needs attention on <b>${fmt(target)}</b>. Open Löptid to see what it is.`:`Your <b>${esc(name)}</b> ${what} on <b>${fmt(target)}</b>, in ${lead} days.${isNotice?' Cancel before then if you don’t want it to continue.':''}`;
+  const chans=it.channels.map(c=>({email:'Email',push:'Push',sms:'SMS'}[c])).join(' + ');
+  el.innerHTML=`<div class="pv-head">Reminder preview <span class="muted">· ${chans} · sent ${fmt(sendOn)}</span></div>
+    <div class="mail"><div class="mail-from">From: Löptid reminders</div><div class="mail-subj">${esc(subj)}</div><div>${body}</div></div>
+    <div class="pv-head small">What our server stores for this reminder</div>
+    <ul class="sees"><li class="y">Stored: send date</li><li class="${it.priv?'n':'y'}">${it.priv?'Not stored: item name':'Stored: item name'}</li><li class="n">Not stored: notes, cost, files</li></ul>`;
+}
+function commit(it,isNew){
+  if(isNew)state.items.push(it);else state.items=state.items.map(i=>i.id===it.id?it:i);
+  if(isNew)draft.isNew=false;
+  save();render();
+}
+const openers={drawer:null,modal:null};
+function syncLock(){document.body.classList.toggle('locked',$('#drawer').open||$('#modal').open)}
+function selFor(a){if(!a||!a.dataset)return null;for(const k of FOCUS_KEYS){if(a.dataset[k]!=null)return `[data-${k}="${a.dataset[k]}"]`}return a.id?'#'+a.id:null}
+function remember(){const a=document.activeElement;return{el:a,sel:selFor(a)}}
+function restore(o){if(!o)return;let el=o.el&&o.el.isConnected?o.el:(o.sel?document.querySelector(o.sel):null);if(el)el.focus({preventScroll:true})}
+function closeDrawer(){const dr=$('#drawer');if(dr.open)dr.close();dr.innerHTML='';draft=null;syncLock();restore(openers.drawer);openers.drawer=null}
+function validate(f){
+  const E=f.elements,bad=[];
+  const set=(name,msg)=>{const el=E.namedItem(name),id='err-'+name;let sp=f.querySelector('#'+id);
+    if(msg){el.setAttribute('aria-invalid','true');el.setAttribute('aria-describedby',id);if(!sp){sp=document.createElement('span');sp.className='err';sp.id=id;el.after(sp)}sp.textContent=msg;bad.push(el)}
+    else{el.removeAttribute('aria-invalid');el.removeAttribute('aria-describedby');if(sp)sp.remove()}};
+  const sv=E.namedItem('s').value,ev=E.namedItem('e').value,open=E.namedItem('open').checked,c=E.namedItem('cost').value,nt=E.namedItem('notice').value;
+  set('name',E.namedItem('name').value.trim()?'':'Give the item a name.');
+  set('s',sv?'':'Choose a start date.');
+  set('e',open?'':!ev?'Choose an end date, or tick “No end date”.':(sv&&ev<=sv)?'The end date must be after the start date.':'');
+  set('cost',c!==''&&!(+c>=0)?'Cost can’t be negative.':'');
+  set('notice',nt!==''&&!(Number.isInteger(+nt)&&+nt>=0)?'Use a whole number of days.':(!open&&sv&&ev&&ev>sv&&+nt>=diff(parse(sv),parse(ev)))?'The notice period is longer than the contract.':'');
+  return bad;
+}
+function renewItem(it){
+  const p=cur(it);
+  if(!p.e){toast('Ongoing items have no end date to renew.');return null}
+  const len=Math.max(1,diff(parse(p.s),parse(p.e))),np={s:p.e,e:iso(addDays(parse(p.e),len))};
+  it.periods.push(np);return np;
+}
+
+/* ---------- Groups ---------- */
+const PALETTE=['#4f6db3','#c0643f','#5e8f6e','#a8801c','#8a5a9e','#3f8796','#b04a6a','#6b7685','#7a8f2e','#2f7d6b'];
+const groupOptions=sel=>state.groups.map(g=>`<option value="${g.id}" ${g.id===sel?'selected':''}>${esc(g.name)}</option>`).join('')+'<option value="__new">+ New group…</option>';
+function nextColor(){const used=new Set(state.groups.map(g=>g.color));return PALETTE.find(c=>!used.has(c))||PALETTE[state.groups.length%PALETTE.length]}
+function makeGroup(name){
+  const g={id:'g'+Math.random().toString(36).slice(2,8),name,color:nextColor()};state.groups.push(g);save();return g;
+}
+function createFromMenu(){
+  const el=$('#newGroupName'),name=(el?el.value:ui.newName).trim();
+  if(!name){if(el)el.focus();toast('Give the group a name.');return}
+  const g=makeGroup(name);ui.hidden.delete(g.id);ui.adding=false;ui.newName='';render();toast(`Created group ${name}.`);
+}
+function groupsModal(focusId){
+  const n=state.groups.length;
+  openModal(`${mhead('Groups','Rename, recolour, reorder or remove groups, or add your own.')}
+  <div class="glist">${state.groups.map((g,i)=>{
+    const cnt=state.items.filter(x=>x.g===g.id).length,others=state.groups.filter(x=>x.id!==g.id);
+    const confirm=ui.gdel===g.id?`<div class="gconfirm">${cnt?`Move its ${cnt} item${cnt===1?'':'s'} to <select id="gmove">${others.map(o=>`<option value="${o.id}">${esc(o.name)}</option>`).join('')}</select> and delete the group?`:'Delete this empty group?'}<span class="sp"></span><button class="btn sm ghost" data-act="gdelcancel">Cancel</button><button class="btn sm" data-act="gdelconfirm" data-id="${g.id}">Delete</button></div>`:'';
+    return `<div class="grow"><input type="color" value="${g.color}" data-gcolor="${g.id}" aria-label="Colour for ${esc(g.name)}"><input type="text" value="${esc(g.name)}" data-gname="${g.id}" aria-label="Group name"><span class="count">${cnt} item${cnt===1?'':'s'}</span><div class="gbtns"><button class="icon-btn" data-act="gmove" data-id="${g.id}" data-dir="-1" aria-label="Move up" ${i===0?'disabled':''}>↑</button><button class="icon-btn" data-act="gmove" data-id="${g.id}" data-dir="1" aria-label="Move down" ${i===n-1?'disabled':''}>↓</button><button class="icon-btn" data-act="gdel" data-id="${g.id}" aria-label="Delete group" title="${n===1?'You need at least one group':'Delete group'}" ${n===1?'disabled':''}>🗑</button></div>${confirm}</div>`;
+  }).join('')}</div>
+  <div class="mfoot"><button class="btn" data-act="gadd">+ Add group</button><span class="sp"></span><button class="btn primary" data-act="closemodal">Done</button></div>`);
+  if(focusId){const el=document.querySelector(`[data-gname="${focusId}"]`);if(el){el.focus();el.select()}}
+}
+
+/* ---------- Modals ---------- */
+function openModal(html,cls=''){ui.menu=null;const m=$('#modal');m.className='dialog '+cls;m.innerHTML=html;if(!m.open){openers.modal=remember();m.showModal()}m.scrollTop=0;syncLock();preserveFocus(()=>{renderTop();renderFilters();renderHead()})}
+function closeModal(){const m=$('#modal');if(m.open)m.close();m.innerHTML='';syncLock();restore(openers.modal);openers.modal=null}
+const mhead=(title,sub)=>`<div class="mhead"><div><h2 id="modalTitle">${title}</h2>${sub?`<p class="muted">${sub}</p>`:''}</div><button class="icon-btn" data-act="closemodal" aria-label="Close">✕</button></div>`;
+
+function templatesModal(){
+  openModal(`${mhead('Add an item','Start from a template. Dates and reminders are filled in for you.')}
+  <div class="tpls">${TEMPLATES.map((t,i)=>`<button class="tpl" data-tpl="${i}" style="--c:${grp(t.g).color}"><i class="dot"></i><b>${esc(t.name)}</b><small>${esc(t.hint)}</small></button>`).join('')}<button class="tpl blank" data-tpl="blank"><b>Blank item</b><small>Anything else</small></button></div>`);
+}
+function storageModal(){
+  const s=state.settings;
+  const opt=(k,title,price,desc,extra='')=>`<label class="sopt ${s.storage===k?'on':''}"><input type="radio" name="st" value="${k}" ${s.storage===k?'checked':''}><div><div class="sopt-t"><b>${title}</b><span class="price">${price}</span></div><p>${desc}</p>${extra}</div></label>`;
+  openModal(`${mhead('Storage &amp; privacy','Your data is encrypted on this device before it is saved anywhere. Choose where the encrypted copy lives.')}
+  <form class="sopts" id="storageForm">
+    ${opt('browser','This browser','Free','Stays on this device only. Nothing is uploaded.',`<div class="note warn">Safari can clear a website's data after 7 days without a visit. Add Löptid to your home screen, or download a backup regularly.</div>`)}
+    ${opt('cloud','Löptid Cloud','Pro','Encrypted sync across all your devices. We keep a copy we cannot read.')}
+    ${opt('gdrive','Your Google Drive','Pro','One encrypted file in your Drive. Löptid can only see files it creates.')}
+    <div class="sopt disabled"><div><div class="sopt-t"><b>Dropbox · OneDrive · Folder on this computer</b><span class="price">Later</span></div><p>More places to keep your data are planned.</p></div></div>
+  </form>
+  <h3>What we can see</h3>
+  <div class="tblwrap" style="box-shadow:none"><table class="tbl sees-tbl"><thead><tr><th></th><th>This browser</th><th>Löptid Cloud</th><th>Google Drive</th></tr></thead><tbody>
+    <tr><td>Your items, notes and files</td><td>Never</td><td>Never (encrypted)</td><td>Never (encrypted)</td></tr>
+    <tr><td>Reminder dates</td><td>Only if you sign in for email reminders</td><td>Yes, to send reminders</td><td>Yes, to send reminders</td></tr>
+    <tr><td>Item names in reminders</td><td colspan="3">Only for items you haven't marked private</td></tr>
+    <tr><td>Works across devices</td><td>No</td><td>Yes</td><td>Yes</td></tr>
+  </tbody></table></div>
+  <div class="mfoot"><button class="btn ghost" data-act="json">${ICON.download} Download backup</button><label class="btn ghost">Restore backup<input type="file" accept="application/json,.json" id="restoreFile" hidden></label><span class="sp"></span><button class="btn ghost" data-act="reset">Reset demo data</button></div>`);
+}
+function upgradeModal(reason,after){
+  pendingAfter=after||null;
+  const s=state.settings;
+  const plan=(key,name,amt,per,feats,cta,featured)=>`<div class="plan ${featured?'featured':''}"><h3>${name}</h3><div class="amt">${amt}<small>${per}</small></div><ul>${feats.map(f=>`<li>${f}</li>`).join('')}</ul>${s.plan===key?'<button class="btn" disabled>Current plan</button>':key==='free'?'':`<button class="btn ${featured?'primary':''}" data-act="subscribe" data-plan="${key}">${cta}</button>`}</div>`;
+  openModal(`${mhead('Choose a plan',esc(reason||'Sync across devices, more ways to be reminded, and encrypted attachments.'))}
+  <div class="plans">
+    ${plan('free','Free','0 kr','',['Unlimited items','Stored in this browser','Email reminders with a free account','Excel, PDF and print export'])}
+    ${plan('pro','Pro','39 kr',' / month',['Everything in Free','Sync via Löptid Cloud or Google Drive','Push and SMS reminders','Encrypted attachments','Calendar sync','Or 349 kr a year'],'Start 14-day trial',true)}
+    ${plan('family','Family','69 kr',' / month',['Everything in Pro','Up to 5 people','Shared groups','Reminders to each member'],'Start 14-day trial')}
+  </div>
+  <p class="muted small" style="margin-top:14px">Placeholder prices, including 25% VAT (moms). Pay by card, Swish or Klarna through a payment provider that handles VAT.</p>`);
+}
+function signinModal(){
+  const s=state.settings;
+  if(s.signedIn){
+    openModal(`${mhead('Account')}
+    <div class="acct"><span class="av big">A</span><div><b>Demo user</b><small class="muted">Plan: ${PLAN_NAME[s.plan]} · Stored in: ${STORAGE[s.storage].short}</small></div></div>
+    <div class="mfoot"><button class="btn ghost" data-act="upgrade">Change plan</button><span class="sp"></span><button class="btn ghost" data-act="signout">Sign out</button></div>`,'narrow');
+    return;
+  }
+  openModal(`${mhead('Sign in','You only need an account for reminders, sync and billing. Your items stay encrypted on your device.')}
+  <div class="signin">
+    <button class="btn big dark" data-act="signin" data-m="BankID">${ICON.shield} Continue with BankID</button>
+    <button class="btn big ghost" data-act="signin" data-m="Google">Continue with Google</button>
+    <button class="btn big ghost" data-act="signin" data-m="email">Email me a sign-in link</button>
+    <button class="linkbtn" data-act="closemodal">Not now, keep using it in this browser</button>
+  </div>`,'narrow');
+}
+function driveModal(){
+  openModal(`${mhead('Connect Google Drive')}
+  <ol class="steps"><li>You sign in with Google and approve access.</li><li>Löptid creates one encrypted file, <code>loptid-vault.enc</code>, in your Drive.</li><li>Löptid can only see files it creates. It never sees the rest of your Drive.</li><li>Google stores the file but can't read it.</li></ol>
+  <div class="mfoot"><button class="btn ghost" data-act="closemodal">Cancel</button><span class="sp"></span><button class="btn primary" data-act="driveconnect">Connect (simulated)</button></div>`,'narrow');
+}
+function chooseStorage(k){
+  const s=state.settings;if(k===s.storage)return;
+  const apply=()=>{
+    if(k==='gdrive'){driveModal();return}
+    s.storage=k;save();closeModal();render();
+    toast(k==='cloud'?'Now syncing to Löptid Cloud (simulated). Data is encrypted on this device first.':'Your data now stays in this browser only.');
+  };
+  if(STORAGE[k].paid&&s.plan==='free'){upgradeModal(`${STORAGE[k].short} storage is part of Pro.`,apply);return}
+  apply();
+}
+
+/* ---------- Export ---------- */
+function download(name,content,type){const blob=new Blob([content],{type}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},800)}
+function exportCSV(){
+  const rows=[['Item','Group','Status','Start','End','Notice deadline','Cost (kr)','Billing','Per month (kr)','Private']];
+  for(const it of visible()){const p=cur(it),n=noticeDate(it);rows.push([it.name,grp(it.g).name,STATUS[status(it)],p.s,p.e||'',n?iso(n):'',it.cost||'',it.cycle==='none'?'':it.cycle==='month'?'Monthly':'Yearly',Math.round(monthly(it))||'',it.priv?'Yes':'No'])}
+  const csv='﻿'+rows.map(r=>r.map(v=>{v=String(v);return/[;"\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(';')).join('\r\n');
+  download(`loptid-export-${iso(T)}.csv`,csv,'text/csv;charset=utf-8');
+  toast('Downloaded a spreadsheet that opens in Excel. The real app makes a formatted .xlsx.');
+}
+function exportICS(){
+  const d8=d=>iso(d).replace(/-/g,''),L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Loptid mock-up//EN','CALSCALE:GREGORIAN'];
+  const escI=s=>s.replace(/[\\,;]/g,m=>'\\'+m);
+  for(const it of visible()){
+    const e=parse(cur(it).e),n=noticeDate(it),title=it.priv?'Private item':it.name;
+    const ev=(d,suffix,tag)=>L.push('BEGIN:VEVENT',`UID:${it.id}-${tag}-${d8(d)}@loptid.mock`,`DTSTAMP:${d8(T)}T000000Z`,`DTSTART;VALUE=DATE:${d8(d)}`,`DTEND;VALUE=DATE:${d8(addDays(d,1))}`,`SUMMARY:${escI(title+suffix)}`,'END:VEVENT');
+    if(e&&e>=T)ev(e,' ends','end');if(n&&n>=T)ev(n,': notice deadline','notice');
+  }
+  L.push('END:VCALENDAR');download('loptid-dates.ics',L.join('\r\n'),'text/calendar');
+  toast('Calendar file downloaded. Private items show as "Private item".');
+}
+function exportJSON(){download(`loptid-backup-${iso(T)}.json`,JSON.stringify(state,null,2),'application/json');toast('Backup downloaded. The real app encrypts this file.')}
+function doPrint(pdf){toast(pdf?'Choose "Save as PDF" in the print dialog.':'Opening print…');setTimeout(()=>window.print(),350)}
+
+/* ---------- Toast ---------- */
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),3600)}
+
+/* ---------- Actions ---------- */
+const MENU_ACT={status:'statusmenu',groups:'groupmenu',sort:'sortmenu',acct:'acctmenu'};
+const menuTo=name=>{ui.menu=ui.menu===name?null:name;ui.adding=false;ui.newName='';preserveFocus(()=>{renderTop();renderFilters();renderHead()});
+  if(ui.menu){const m=document.querySelector('.ddmenu,.menu');const f=m&&(m.querySelector('[aria-pressed="true"]')||m.querySelector('button,input'));if(f)f.focus()}};
+const closeMenu=()=>{ui.menu=null;ui.adding=false;ui.newName='';renderTop();renderFilters();renderHead()};
+const ACT={
+  closedrawer:closeDrawer,closemodal:closeModal,
+  storage:()=>{closeMenu();storageModal()},account:()=>{closeMenu();signinModal()},upgrade:()=>{closeMenu();upgradeModal()},
+  add:templatesModal,
+  acctmenu:()=>menuTo('acct'),statusmenu:()=>menuTo('status'),groupmenu:()=>menuTo('groups'),closemenu:closeMenu,
+  groupsall:()=>{ui.hidden.clear();render()},
+  ngstart:()=>{ui.adding=true;ui.newName='';renderFilters();const el=$('#newGroupName');if(el)el.focus()},
+  ngcancel:()=>{ui.adding=false;ui.newName='';renderFilters()},
+  ngcreate:createFromMenu,
+  nextall:()=>{ui.nextAll=!ui.nextAll;renderNextUp()},
+  xlsx:()=>{closeMenu();exportCSV()},pdf:()=>{closeMenu();doPrint(true)},print:()=>{closeMenu();doPrint(false)},
+  ics:()=>{closeMenu();exportICS()},json:()=>{closeMenu();exportJSON()},
+  reset:t=>{if(!t.dataset.armed){t.dataset.armed='1';t.textContent='Click again to reset';return}state=sample();ui.hidden.clear();ui.open=null;save();closeModal();closeDrawer();render();toast('Demo data reset.')},
+  calprev:()=>{ui.cal=new Date(ui.cal.getFullYear(),ui.cal.getMonth()-1,1);ui.calSel=null;render()},
+  calnext:()=>{ui.cal=new Date(ui.cal.getFullYear(),ui.cal.getMonth()+1,1);ui.calSel=null;render()},
+  caltoday:()=>{ui.cal=new Date(T.getFullYear(),T.getMonth(),1);ui.calSel=null;render()},
+  calclear:()=>{ui.calSel=null;render()},
+  sortmenu:()=>menuTo('sort'),
+  clearfilters:()=>{ui.filter='all';ui.q='';ui.hidden.clear();$('#q').value='';render()},
+  delete:t=>{if(!t.dataset.armed){t.dataset.armed='1';t.textContent='Confirm delete';return}const name=draft.it.name;state.items=state.items.filter(i=>i.id!==draft.it.id);save();closeDrawer();render();toast(`Deleted ${name}.`)},
+  renew:()=>{
+    const it=readForm($('#itemForm')),np=renewItem(it);if(!np)return;
+    commit(it,draft.isNew);openDrawer(it.id);toast(`New period added: ${fmt(parse(np.s))} – ${fmt(parse(np.e))}.`);
+  },
+  signin:t=>{
+    const m=t.dataset.m,box=t.closest('.signin');
+    box.innerHTML=`<div class="waiting"><span class="spinner"></span><p>${m==='BankID'?'Open the BankID app on your phone and confirm.':m==='Google'?'Redirecting to Google…':'Check your inbox for a sign-in link.'}</p><small class="muted">Simulated. Nothing is sent.</small></div>`;
+    setTimeout(()=>{state.settings.signedIn=true;save();closeModal();render();toast(`Signed in with ${m==='email'?'an email link':m} (simulated). Email reminders are on.`)},1400);
+  },
+  signout:()=>{const s=state.settings;s.signedIn=false;s.plan='free';if(STORAGE[s.storage].paid)s.storage='browser';save();closeModal();render();toast('Signed out. Your data stays in this browser.')},
+  subscribe:t=>{
+    const s=state.settings;s.plan=t.dataset.plan;s.signedIn=true;save();closeModal();render();
+    toast(`${PLAN_NAME[s.plan]} trial started (simulated).`);
+    if(pendingAfter){const f=pendingAfter;pendingAfter=null;f()}
+  },
+  groups:()=>{ui.gdel=null;groupsModal()},
+  gadd:()=>{const g=makeGroup('New group');render();groupsModal(g.id)},
+  gmove:t=>{const i=state.groups.findIndex(g=>g.id===t.dataset.id),j=i+(+t.dataset.dir);if(j<0||j>=state.groups.length)return;const a=state.groups;[a[i],a[j]]=[a[j],a[i]];save();render();groupsModal()},
+  gdel:t=>{ui.gdel=t.dataset.id;groupsModal()},
+  gdelcancel:()=>{ui.gdel=null;groupsModal()},
+  gdelconfirm:t=>{
+    const id=t.dataset.id,g=grp(id),to=$('#gmove')?.value,cnt=state.items.filter(x=>x.g===id).length;
+    if(cnt&&to)state.items.forEach(x=>{if(x.g===id)x.g=to});
+    state.groups=state.groups.filter(x=>x.id!==id);ui.hidden.delete(id);ui.gdel=null;save();render();groupsModal();
+    toast(cnt?`Deleted ${g.name}. Moved ${cnt} item${cnt===1?'':'s'} to ${grp(to).name}.`:`Deleted ${g.name}.`);
+  },
+  createg:()=>{
+    const f=$('#itemForm'),E=f.elements,name=(E.namedItem('newg').value||'').trim();
+    if(!name){E.namedItem('newg').focus();toast('Give the group a name.');return}
+    const g=makeGroup(name);E.namedItem('g').innerHTML=groupOptions(g.id);E.namedItem('newg').value='';f.querySelector('.newgrp').hidden=true;
+    readForm(f);render();toast(`Created group ${name}.`);
+  },
+  driveconnect:()=>{state.settings.storage='gdrive';save();closeModal();render();toast('Google Drive connected (simulated). Your encrypted file is synced.')},
+};
+
+function focusRow(it){
+  ui.open=it.id;ui.filter='all';ui.hidden.delete(it.g);ui.collapsed.delete(it.g);ui.menu=null;
+  if(ui.q&&!searched().includes(it)){ui.q='';$('#q').value=''}
+  render();const el=document.getElementById('row-'+it.id);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});
+}
+document.addEventListener('click',e=>{
+  if(ui.menu&&!e.target.closest('.dd,.menu-wrap')){ui.menu=null;renderTop();renderFilters();renderHead()}
+  if(e.target.tagName==='DIALOG'){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom){e.target.id==='modal'?closeModal():closeDrawer();return}}
+  const t=e.target.closest('[data-open],[data-act],[data-view],[data-filter],[data-group],[data-sort],[data-tpl],[data-zoom],[data-row],[data-collapse],[data-next],[data-renew],[data-sortkey],[data-day],[data-agenda]');if(!t)return;
+  const D=t.dataset;
+  if(D.view){ui.view=D.view;ui.menu=null;render();return}
+  if(D.zoom){ui.span=+D.zoom;render();return}
+  if(D.filter){ui.filter=D.filter;ui.menu=null;render();return}
+  if(D.group){const g=D.group;ui.hidden.has(g)?ui.hidden.delete(g):ui.hidden.add(g);render();return}
+  if(D.sortkey){ui.sort=D.sortkey;ui.menu=null;render();return}
+  if(D.day){ui.calSel=ui.calSel===D.day?null:D.day;render();return}
+  if(D.agenda){const it=state.items.find(i=>i.id===D.agenda);if(it){ui.view='timeline';focusRow(it)}return}
+  if(D.tpl){const v=D.tpl;closeModal();openDrawer(null,v==='blank'?{}:TEMPLATES[+v]);return}
+  if(D.collapse){const g=D.collapse;ui.collapsed.has(g)?ui.collapsed.delete(g):ui.collapsed.add(g);render();return}
+  if(D.row){ui.open=ui.open===D.row?null:D.row;render();return}
+  if(D.renew){const it=state.items.find(i=>i.id===D.renew);if(!it)return;const np=renewItem(it);if(!np)return;save();render();toast(`Renewed ${it.name}: ${fmt(parse(np.s))} – ${fmt(parse(np.e))}.`);return}
+  if(D.next){
+    const it=state.items.find(i=>i.id===D.next);if(!it)return;
+    if(ui.view==='calendar')ui.view='timeline';
+    focusRow(it);return;
+  }
+  if(D.open){openDrawer(D.open);return}
+  const a=D.act;if(a&&ACT[a]){e.preventDefault();ACT[a](t,e)}
+});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.name==='st'){chooseStorage(t.value)}
+  else if(t.id==='restoreFile'&&t.files[0]){
+    t.files[0].text().then(txt=>{const d=JSON.parse(txt);if(!d||d.v!==1||!Array.isArray(d.items))throw 0;state=d;save();closeModal();render();toast('Backup restored.')}).catch(()=>toast("That file isn't a Löptid backup."));
+  }
+});
+$('#q').addEventListener('input',e=>{ui.q=e.target.value;render()});
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.id==='newGroupName'){ui.newName=t.value;return}
+  if(t.dataset.gname){const g=grp(t.dataset.gname);g.name=t.value.trim()||'Untitled group';save();render()}
+  else if(t.dataset.gcolor){const g=grp(t.dataset.gcolor);g.color=t.value;save();render()}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.name==='newg'){e.preventDefault();ACT.createg()}});
+document.addEventListener('keydown',e=>{
+  if(e.target.id==='newGroupName'){
+    if(e.key==='Enter'){e.preventDefault();createFromMenu();return}
+    if(e.key==='Escape'){e.preventDefault();ACT.ngcancel();return}
+  }
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#q').focus();$('#q').select()}
+  if(e.key==='Escape'&&ui.menu){e.preventDefault();const back=MENU_ACT[ui.menu];closeMenu();const t=document.querySelector(`[data-act="${back}"]`);if(t)t.focus();return}
+  // Arrow keys inside open menus
+  const menu=e.target.closest&&e.target.closest('.ddmenu,.menu');
+  if(menu&&(e.key==='ArrowDown'||e.key==='ArrowUp'||e.key==='Home'||e.key==='End')){
+    const f=[...menu.querySelectorAll('button,input')].filter(x=>!x.disabled&&x.offsetParent);const i=f.indexOf(e.target);
+    const j=e.key==='Home'?0:e.key==='End'?f.length-1:(i+(e.key==='ArrowDown'?1:-1)+f.length)%f.length;e.preventDefault();f[j].focus();return}
+  // Arrow keys in the calendar grid
+  if(e.target.classList&&e.target.classList.contains('day')&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(e.key)){
+    e.preventDefault();const d=parse(e.target.dataset.day);
+    const nd=e.key==='Home'?addDays(d,-((d.getDay()+6)%7)):e.key==='End'?addDays(d,6-((d.getDay()+6)%7)):addDays(d,{ArrowLeft:-1,ArrowRight:1,ArrowUp:-7,ArrowDown:7}[e.key]);
+    const k=iso(nd);let el=document.querySelector(`[data-day="${k}"]`);
+    if(!el||el.classList.contains('out')){ui.cal=new Date(nd.getFullYear(),nd.getMonth(),1);ui.calSel=null;render();el=document.querySelector(`[data-day="${k}"]`)}
+    if(el){document.querySelectorAll('.day').forEach(b=>b.tabIndex=-1);el.tabIndex=0;el.focus()}return}
+});
+['modal','drawer'].forEach(id=>$('#'+id).addEventListener('cancel',e=>{e.preventDefault();if(id==='modal')closeModal();else closeDrawer()}));
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+render();
+</script>
+</body>
+</html>
