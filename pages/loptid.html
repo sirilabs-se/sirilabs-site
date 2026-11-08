@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Löptid Mock-up</title>
+<title>Löptid Mock-up v2.5</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -110,7 +110,7 @@ main{max-width:1280px;margin:0 auto;padding:28px 20px 48px;display:flex;flex-dir
 .nucard .unit{font-size:13px;color:var(--ink-2)}
 .nucard .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .nucard .dt{font-size:13px;color:var(--ink-2)}
-.tone{font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;white-space:nowrap}
+.tone{min-width:0;overflow:hidden;text-overflow:ellipsis;font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;white-space:nowrap}
 .ok{background:var(--accent-2);color:var(--accent)}
 .warn{background:var(--warn-bg);color:var(--warn)}
 .danger{background:var(--danger-bg);color:var(--danger)}
@@ -262,12 +262,13 @@ main{max-width:1280px;margin:0 auto;padding:28px 20px 48px;display:flex;flex-dir
 /* Calendar */
 .calwrap{display:flex;flex-direction:column;gap:16px}
 .calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.calrow{display:contents}
 .dow{padding:8px 10px;font-size:11px;font-weight:700;color:var(--ink-2);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--line);background:var(--surface-2)}
 .day{min-width:0;min-height:108px;display:flex;flex-direction:column;align-items:stretch;gap:3px;padding:6px;border:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface);text-align:left;cursor:pointer}
 .day:nth-child(7n){border-right:0}
 .day.out{background:var(--bg)}
 .day:hover{background:var(--surface-2)}
-.day[aria-pressed="true"]{background:var(--accent-2);box-shadow:inset 0 0 0 2px var(--accent)}
+.day[aria-selected="true"]{background:var(--accent-2);box-shadow:inset 0 0 0 2px var(--accent)}
 .dn{width:24px;height:24px;display:grid;place-items:center;border-radius:50%;font-size:12px;font-weight:600;color:var(--ink-2)}
 .day.out .dn{color:var(--ink-2)}
 .day.today .dn{background:var(--danger);color:var(--on-danger)}
@@ -429,42 +430,19 @@ code{font-size:13px;background:var(--surface-2);padding:1px 5px;border-radius:4p
 }
 @media (max-width:419px){.detbtns .btn svg{display:none}}
 @media (min-width:420px) and (max-width:600px){.detbtns .btn svg{display:inline}}
-@media (max-width:359px){.brand-name{display:none}.ddbtn .dots{display:none}}
+@media (max-width:359px){.ddbtn .dots{display:none}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
-/* Alternative variant: reviewer's phone header + timeline cards */
+/* Phone header: brand + actions / search / full-width view switch */
 @media (max-width:600px){
-  .v-alt .brand{order:1;flex:1 1 auto}
-  .v-alt .actions{order:2;margin-left:0}
-  .v-alt .search{order:3;flex:1 1 100%;max-width:none}
-  .v-alt .views{order:4;flex:1 1 100%}
-  .v-alt .views button{flex:1 1 0}
-  .v-alt .brand-name{display:inline}
+  .brand{order:1;flex:1 1 auto}
+  .actions{order:2;margin-left:0}
+  .search{order:3;flex:1 1 100%;max-width:none}
+  .views{order:4;flex:1 1 100%}
+  .views button{flex:1 1 0}
 }
-.tcards{display:flex;flex-direction:column;gap:18px}
-.tc-group{display:flex;flex-direction:column;gap:10px}
-.tc-ghead{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;min-height:44px;padding:0 4px;border:0;background:transparent;text-align:left;cursor:pointer}
-.tc-ghead svg{flex:none;transition:transform .15s}
-.tc-ghead[aria-expanded="false"] svg{transform:rotate(-90deg)}
-.tc-ghead .gsp{margin-left:auto;white-space:nowrap}
-.tc{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
-.tc.soon{border-color:color-mix(in srgb,var(--warn) 50%,transparent)}
-.tc.expired{border-color:color-mix(in srgb,var(--danger) 35%,transparent)}
-.tc.open{background:var(--row-open)}
-.tcbtn{width:100%;display:flex;flex-direction:column;gap:10px;padding:14px 16px;border:0;background:transparent;text-align:left;cursor:pointer}
-.tc-top{display:flex;align-items:flex-start;gap:10px}
-.tc-name{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
-.tc-name b{display:flex;align-items:center;gap:6px;min-width:0;font-size:15px}
-.tc-name b svg{flex:none;color:var(--ink-2)}
-.tc.open .tc-name .ell{white-space:normal;overflow-wrap:anywhere}
-.tc-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:12px;color:var(--ink-2)}
-.tc-prog{display:flex;flex-direction:column;gap:5px}
-.tc-prog .bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
-.tc-prog .bar i{display:block;height:100%;border-radius:99px}
-.tc-prog .cap{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--ink-2)}
-.tc-state{font-size:12px;font-weight:600;color:var(--ink-2)}
-.tc-state.exp{color:var(--danger)}
+
 @media print{
   .topbar,.nextup,.filters,.drawer,.dialog,.toast,.foot,.legend,.head .ctrl,.detbtns{display:none!important}
   .tcard{box-shadow:none;border-color:#ccc}
@@ -519,11 +497,8 @@ code{font-size:13px;background:var(--surface-2);padding:1px 5px;border-radius:4p
 
 <script>
 const STORE_KEY='loptid-mock-v1';
-const VARIANT='alt'; // 'standard' | 'alt'
 const LOCALE='en-GB';     // one place to change date formatting, e.g. 'sv-SE'
-const phoneMQ=matchMedia('(max-width:600px)');
-if(VARIANT==='alt')document.body.classList.add('v-alt');
-const cardsMode=()=>VARIANT==='alt'&&phoneMQ.matches;
+
 const DAY=86400000;
 const T=(()=>{const d=new Date();d.setHours(0,0,0,0);return d})();
 const $=s=>document.querySelector(s);
@@ -605,7 +580,7 @@ function load(){try{const r=localStorage.getItem(STORE_KEY);if(r){const d=JSON.p
 function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(state))}catch(e){}}
 
 let state=load()||sample();
-const ui={view:'timeline',filter:'all',q:'',span:365,cal:new Date(T.getFullYear(),T.getMonth(),1),sort:'end',calSel:null,hidden:new Set(),collapsed:new Set(),open:null,menu:null,nextAll:false,adding:false,newName:''};
+const ui={view:'timeline',filter:'all',q:'',span:365,cal:new Date(T.getFullYear(),T.getMonth(),1),sort:'end',calSel:null,calFocus:null,hidden:new Set(),collapsed:new Set(),open:null,menu:null,nextAll:false,adding:false,newName:''};
 let draft=null,pendingAfter=null;
 
 const grp=id=>state.groups.find(g=>g.id===id)||{name:'—',color:'#888888'};
@@ -652,7 +627,7 @@ function renderHead(){
   const its=state.items,spend=its.reduce((a,i)=>a+monthly(i),0);
   const next30=its.reduce((a,i)=>a+[noticeDate(i),parse(cur(i).e)].filter(d=>d&&diff(T,d)>=0&&diff(T,d)<=30).length,0);
   let ctrl='';
-  if(ui.view==='timeline'&&!cardsMode())ctrl=`<div class="seg" role="group" aria-label="Zoom">${[[182,'6 months','6 mo'],[365,'1 year','1 yr'],[1095,'3 years','3 yr']].map(([v,l,s])=>`<button data-zoom="${v}" aria-pressed="${ui.span===v}" aria-label="${l}"><span class="long" aria-hidden="true">${l}</span><span class="short" aria-hidden="true">${s}</span></button>`).join('')}</div>`;
+  if(ui.view==='timeline')ctrl=`<div class="seg" role="group" aria-label="Zoom">${[[182,'6 months','6 mo'],[365,'1 year','1 yr'],[1095,'3 years','3 yr']].map(([v,l,s])=>`<button data-zoom="${v}" aria-pressed="${ui.span===v}" aria-label="${l}"><span class="long" aria-hidden="true">${l}</span><span class="short" aria-hidden="true">${s}</span></button>`).join('')}</div>`;
   else if(ui.view==='calendar'){
     const away=ui.cal.getFullYear()!==T.getFullYear()||ui.cal.getMonth()!==T.getMonth();
     ctrl=`<div class="calnav"><button class="navbtn" data-act="calprev" aria-label="Previous month">${svg('<path d="m15 6-6 6 6 6"/>',16,2.2)}</button><b><span class="long">${ui.cal.toLocaleDateString(LOCALE,{month:'long',year:'numeric'})}</span><span class="short">${ui.cal.toLocaleDateString(LOCALE,{month:'short',year:'numeric'})}</span></b><button class="navbtn" data-act="calnext" aria-label="Next month">${svg('<path d="m9 6 6 6-6 6"/>',16,2.2)}</button>${away?'<button class="btn" data-act="caltoday">Today</button>':''}</div>`;
@@ -795,39 +770,6 @@ function progressHtml(it){
   return `<div><div class="prog-top"><b>${pc}% of this period has passed</b><span class="muted">${left===0?'Ends today':left+' of '+td+' days left'}</span></div><div class="prog"><i style="width:${pc}%;background:${c}"></i></div></div>`;
 }
 
-/* ---------- Timeline as cards (alt variant on phones) ---------- */
-function tagInfo(it){
-  const st=status(it),p=cur(it),ps=parse(p.s),pe=parse(p.e),n=noticeDate(it),soon=state.settings.soon;
-  if(st==='upcoming')return{tag:'Starts in '+dur(diff(T,ps)),tone:'mute'};
-  if(st==='expired')return{tag:dur(diff(pe,T))+' ago',tone:'danger'};
-  if(!pe)return{tag:'Ongoing',tone:'mute'};
-  const tg=n&&n>=T?n:pe,dd=diff(T,tg);return{tag:dd===0?'Today':dur(dd),tone:dd<=soon?'warn':'ok'};
-}
-function renderTimelineCards(items){
-  let body='';
-  for(const g of state.groups){
-    const gi=items.filter(i=>i.g===g.id);if(!gi.length)continue;
-    const col=ui.collapsed.has(g.id),sp=gi.reduce((a,i)=>a+monthly(i),0);
-    body+=`<div class="tc-group"><button class="tc-ghead" data-collapse="${g.id}" aria-expanded="${!col}">${ICON.chev}<i class="dot" style="--c:${g.color}"></i><b>${esc(g.name)}</b><span class="small muted">${gi.length} item${gi.length===1?'':'s'}</span><span class="small muted gsp">${sp?kr(sp)+' / month':''}</span></button>${col?'':gi.map(it=>tcard(it,g)).join('')}</div>`;
-  }
-  return `<div class="tcards">${body||`<div class="tcard">${emptyHtml()}</div>`}</div>`;
-}
-function tcard(it,g){
-  const st=status(it),p=cur(it),ps=parse(p.s),pe=parse(p.e),n=noticeDate(it),open=ui.open===it.id,soon=state.settings.soon;
-  const {tag,tone}=tagInfo(it),nw=n&&n>=T&&diff(T,n)<=soon;
-  const cost=it.cost?kr(it.cost)+(it.cycle==='month'?'/mo':it.cycle==='year'?'/yr':''):'—';
-  let mid='';
-  if(pe&&st!=='expired'&&st!=='upcoming'){const td=Math.max(1,diff(ps,pe)),pc=Math.min(100,Math.round(Math.max(0,diff(ps,T))/td*100)),left=diff(T,pe);
-    mid=`<span class="tc-prog" aria-hidden="true"><span class="bar"><i style="width:${pc}%;background:${g.color}"></i></span><span class="cap"><span>${pc}% of period passed</span><span>${left===0?'Ends today':left+' days left'}</span></span></span>`}
-  else if(st==='expired'||st==='upcoming')mid=`<span class="tc-state ${st==='expired'?'exp':''}" aria-hidden="true">${st==='expired'?'Expired '+fmt(pe):'Starts '+fmt(ps)}</span>`;
-  const aria=`${it.name}, ${g.name}, ${STATUS[st]}, ${tag}, ends ${pe?fmt(pe):'never'}${n?', notice by '+fmt(n):''}`;
-  return `<div class="tc ${st} ${open?'open':''}" id="row-${it.id}"><button class="tcbtn" data-row="${it.id}" aria-expanded="${open}" aria-label="${esc(aria)}">
-    <span class="tc-top" aria-hidden="true"><span class="tc-name"><b>${it.priv?ICON.lockSm:''}<span class="ell">${esc(it.name)}</span></b><span class="tc-meta">${pill(st)}${esc(g.name)}</span></span><span class="tag ${tone}">${tag}</span></span>
-    ${mid}
-    <span class="mfacts" aria-hidden="true" style="margin-left:0"><span><small>Started</small><b>${fmt(ps)}</b></span><span><small>Ends</small><b class="${pe?'':'mute-t'}">${pe?fmt(pe):'Ongoing'}</b></span><span><small>Notice by</small><b class="${nw?'warn-t':n?'':'mute-t'}">${n?fmt(n):'—'}</b></span><span><small>Cost</small><b class="${it.cost?'':'mute-t'}">${cost}</b></span></span>
-  </button>${open?`<div class="det"><p class="dnotes">Reminders: <b>${it.remind.length?[...it.remind].sort((a,b)=>b-a).map(x=>x+' days').join(', ')+' before':'Off'}</b></p>${it.notes?`<p class="dnotes">${esc(it.notes)}</p>`:''}${detBtns(it.id)}</div>`:''}</div>`;
-}
-
 /* ---------- Table ---------- */
 const SORTS=[['end','End date'],['notice','Notice deadline'],['name','Name'],['status','Status'],['cost','Cost per month']];
 function renderTable(items){
@@ -858,33 +800,56 @@ function renderTable(items){
 }
 
 /* ---------- Calendar ---------- */
-const DOW=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-function renderCalendar(items){
+// Weekday names follow LOCALE (1 Jan 2024 was a Monday)
+const DOW=[0,1,2,3,4,5,6].map(i=>{const d=new Date(2024,0,1+i);return{short:d.toLocaleDateString(LOCALE,{weekday:'short'}),long:d.toLocaleDateString(LOCALE,{weekday:'long'})}});
+function calGrid(){
   const y=ui.cal.getFullYear(),mo=ui.cal.getMonth(),first=new Date(y,mo,1),lead=(first.getDay()+6)%7,dim=new Date(y,mo+1,0).getDate();
-  const cells=Math.ceil((lead+dim)/7)*7,gridStart=addDays(first,-lead),soon=state.settings.soon;
-  const evs={},put=(d,ev)=>{if(d.getMonth()!==mo||d.getFullYear()!==y)return;(evs[iso(d)]??=[]).push(ev)};
+  const cells=Math.ceil((lead+dim)/7)*7,start=addDays(first,-lead);
+  return {y,mo,first,dim,cells,start,end:addDays(start,cells-1)};
+}
+function calEvents(items,G){
+  // Events for every date shown in the grid, including the neighbouring months' days
+  const soon=state.settings.soon,from=iso(G.start),to=iso(G.end),evs={};
+  const put=(d,ev)=>{const k=iso(d);if(k<from||k>to)return;(evs[k]??=[]).push(ev)};
   for(const it of items){
     const g=grp(it.g),p=cur(it),e=parse(p.e),n=noticeDate(it),st=status(it);
     if(e){const dd=diff(T,e);put(e,{it,g,rank:1,kind:st==='expired'?'Expired':it.trial?'Trial converts':'Ends',chip:(st==='expired'?'Expired ':'Ends ')+it.name,tone:st==='expired'?'danger':dd>=0&&dd<=soon?'warn':'ok'})}
     if(n)put(n,{it,g,rank:0,kind:'Notice deadline',chip:'Notice: '+it.name,tone:'warn',notice:true});
-    if(it.cycle==='month'&&!it.trial&&it.cost){const s=parse(p.s),bd=new Date(y,mo,Math.min(s.getDate(),dim));if(bd>=s&&(!e||bd<e))put(bd,{it,g,rank:2,kind:'Billed '+kr(it.cost),chip:'Billed '+it.name,tone:'mute'})}
+    if(it.cycle==='month'&&!it.trial&&it.cost){const s0=parse(p.s);
+      for(let m=G.mo-1;m<=G.mo+1;m++){const md=new Date(G.y,m+1,0).getDate(),bd=new Date(G.y,m,Math.min(s0.getDate(),md));if(bd>=s0&&(!e||bd<e))put(bd,{it,g,rank:2,kind:'Billed '+kr(it.cost),chip:'Billed '+it.name,tone:'mute'})}}
   }
   Object.values(evs).forEach(l=>l.sort((a,b)=>a.rank-b.rank));
-  const focusKey=ui.calSel&&parse(ui.calSel).getMonth()===mo?ui.calSel:(T.getMonth()===mo&&T.getFullYear()===y?iso(T):iso(first));
-  let days='';
-  for(let i=0;i<cells;i++){
-    const d=addDays(gridStart,i),k=iso(d),l=evs[k]||[],sel=ui.calSel===k;
-    const label=d.toLocaleDateString(LOCALE,{weekday:'long',day:'numeric',month:'long'})+(l.length?`, ${l.length} date${l.length===1?'':'s'}`:'');
-    days+=`<button class="day ${d.getMonth()!==mo?'out':''} ${diff(T,d)===0?'today':''}" data-day="${k}" aria-pressed="${sel}" aria-label="${esc(label)}" tabindex="${k===focusKey?0:-1}"><span class="dn">${d.getDate()}</span><span class="chips" aria-hidden="true">${l.slice(0,3).map(ev=>`<span class="chip ${ev.notice?'notice':''}" style="--c:${ev.g.color}">${esc(ev.chip)}</span>`).join('')}${l.length>3?`<span class="more"><span class="long">+${l.length-3} more</span><span class="short">+${l.length-3}</span></span>`:''}</span></button>`;
+  return evs;
+}
+const plural=(n,w)=>`${n} ${w}${n===1?'':'s'}`;
+function renderCalendar(items){
+  const G=calGrid(),evs=calEvents(items,G),from=iso(G.start),to=iso(G.end),inGrid=k=>k&&k>=from&&k<=to;
+  const monthKey=iso(G.first).slice(0,7),monthLong=G.first.toLocaleDateString(LOCALE,{month:'long',year:'numeric'});
+  // Exactly one date is in the tab order
+  const focusKey=inGrid(ui.calFocus)?ui.calFocus:inGrid(ui.calSel)?ui.calSel:(iso(T).slice(0,7)===monthKey?iso(T):iso(G.first));
+  let rows='';
+  for(let w=0;w<G.cells/7;w++){
+    rows+='<div role="row" class="calrow">';
+    for(let i=0;i<7;i++){
+      const d=addDays(G.start,w*7+i),k=iso(d),l=evs[k]||[],sel=ui.calSel===k;
+      const label=d.toLocaleDateString(LOCALE,{weekday:'long',day:'numeric',month:'long'})+(l.length?', '+plural(l.length,'event'):', no events');
+      rows+=`<button role="gridcell" class="day ${d.getMonth()!==G.mo?'out':''} ${diff(T,d)===0?'today':''}" data-day="${k}" aria-selected="${sel}" aria-label="${esc(label)}"${diff(T,d)===0?' aria-current="date"':''} tabindex="${k===focusKey?0:-1}"><span class="dn" aria-hidden="true">${d.getDate()}</span><span class="chips" aria-hidden="true">${l.slice(0,3).map(ev=>`<span class="chip ${ev.notice?'notice':''}" style="--c:${ev.g.color}">${esc(ev.chip)}</span>`).join('')}${l.length>3?`<span class="more"><span class="long">+${l.length-3} more</span><span class="short">+${l.length-3}</span></span>`:''}</span></button>`;
+    }
+    rows+='</div>';
   }
-  const keys=Object.keys(evs).sort().filter(k=>!ui.calSel||k===ui.calSel);
-  const sd=ui.calSel?parse(ui.calSel):null,mname=first.toLocaleDateString(LOCALE,{month:'long'});
+  const keys=Object.keys(evs).sort().filter(k=>ui.calSel?k===ui.calSel:k.slice(0,7)===monthKey);
+  const sd=ui.calSel?parse(ui.calSel):null,mname=G.first.toLocaleDateString(LOCALE,{month:'long'});
   const agenda=keys.map(k=>{const d=parse(k),isT=diff(T,d)===0;
     return `<div class="ag-day"><div class="ag-date"><b style="color:${isT?'var(--danger)':d<T?'var(--ink-2)':'var(--ink)'}">${d.toLocaleDateString(LOCALE,{day:'numeric',month:'short'})}</b><small>${isT?'Today':d.toLocaleDateString(LOCALE,{weekday:'long'})}</small></div>
     <div class="ag-items">${evs[k].map(ev=>`<button class="ag-item" data-agenda="${ev.it.id}"><i class="dot" style="--c:${ev.g.color}"></i><span class="txt"><b class="ell">${esc(ev.it.name)}</b><small class="ell">${esc(ev.g.name)}${ev.notice?' · last day to cancel':''}</small></span><span class="tag ${ev.tone}">${esc(ev.kind)}</span></button>`).join('')}</div></div>`}).join('');
-  return `<div class="calwrap"><div class="tcard"><div class="calgrid">${DOW.map(x=>`<div class="dow">${x}</div>`).join('')}</div><div class="calgrid">${days}</div></div>
-  <div class="tcard"><div class="ag-head"><div><h2>${sd?sd.toLocaleDateString(LOCALE,{weekday:'long',day:'numeric',month:'long'}):'All of '+mname}</h2><small>${sd?'Dates due on this day':'Tap a day to see only that day'}</small></div>${sd?'<button class="btn sm" data-act="calclear">Whole month</button>':''}</div>
-  ${agenda||`<p class="ag-empty">${sd?'Nothing due on this day.':'Nothing due this month.'}</p>`}</div></div>`;
+  return `<div class="calwrap"><div class="tcard"><div class="calgrid" role="grid" aria-label="${esc(monthLong)}"><div role="row" class="calrow">${DOW.map(x=>`<div role="columnheader" class="dow" aria-label="${esc(x.long)}"><span aria-hidden="true">${esc(x.short)}</span></div>`).join('')}</div>${rows}</div></div>
+  <section class="tcard" aria-labelledby="agTitle"><div class="ag-head"><div><h2 id="agTitle">${sd?sd.toLocaleDateString(LOCALE,{weekday:'long',day:'numeric',month:'long'}):'All of '+mname}</h2><small>${sd?'Dates due on this day':'Tap a day to see only that day'}</small></div>${sd?'<button class="btn sm" data-act="calclear">Whole month</button>':''}</div>
+  ${agenda||`<p class="ag-empty">${sd?'Nothing due on this day.':'Nothing due this month.'}</p>`}</section></div>`;
+}
+function announceDay(){
+  if(!ui.calSel){announce('Showing everything due this month');return}
+  const n=document.querySelectorAll('.ag-item').length,d=parse(ui.calSel);
+  announce(`${d.toLocaleDateString(LOCALE,{weekday:'long',day:'numeric',month:'long'})}: ${n?plural(n,'event'):'nothing due'}`);
 }
 
 const FOCUS_KEYS=['row','open','renew','view','zoom','filter','group','collapse','day','sortkey','next','agenda','tpl','act'];
@@ -900,12 +865,12 @@ function render(){
   preserveFocus(()=>{
     renderTop();renderHead();renderNextUp();renderFilters();
     const items=visible();
-    $('#view').innerHTML=ui.view==='timeline'?(cardsMode()?renderTimelineCards(items):renderTimeline(items)):ui.view==='table'?renderTable(items):renderCalendar(items);
-    if(render.ready)announce(`${items.length} item${items.length===1?'':'s'} shown`);
+    $('#view').innerHTML=ui.view==='timeline'?renderTimeline(items):ui.view==='table'?renderTable(items):renderCalendar(items);
+    if(render.ready&&items.length!==render.lastCount)announce(`${items.length} item${items.length===1?'':'s'} shown`);
+    render.lastCount=items.length;
   });
   render.ready=true;
 }
-phoneMQ.addEventListener&&phoneMQ.addEventListener('change',()=>{if(VARIANT==='alt')render()});
 
 /* ---------- Item drawer ---------- */
 function newItem(t={}){
@@ -1154,10 +1119,10 @@ const ACT={
   xlsx:()=>{closeMenu();exportCSV()},pdf:()=>{closeMenu();doPrint(true)},print:()=>{closeMenu();doPrint(false)},
   ics:()=>{closeMenu();exportICS()},json:()=>{closeMenu();exportJSON()},
   reset:t=>{if(!t.dataset.armed){t.dataset.armed='1';t.textContent='Click again to reset';return}state=sample();ui.hidden.clear();ui.open=null;save();closeModal();closeDrawer();render();toast('Demo data reset.')},
-  calprev:()=>{ui.cal=new Date(ui.cal.getFullYear(),ui.cal.getMonth()-1,1);ui.calSel=null;render()},
-  calnext:()=>{ui.cal=new Date(ui.cal.getFullYear(),ui.cal.getMonth()+1,1);ui.calSel=null;render()},
-  caltoday:()=>{ui.cal=new Date(T.getFullYear(),T.getMonth(),1);ui.calSel=null;render()},
-  calclear:()=>{ui.calSel=null;render()},
+  calprev:()=>{ui.calFocus=null;ui.cal=new Date(ui.cal.getFullYear(),ui.cal.getMonth()-1,1);ui.calSel=null;render()},
+  calnext:()=>{ui.calFocus=null;ui.cal=new Date(ui.cal.getFullYear(),ui.cal.getMonth()+1,1);ui.calSel=null;render()},
+  caltoday:()=>{ui.calFocus=null;ui.cal=new Date(T.getFullYear(),T.getMonth(),1);ui.calSel=null;render()},
+  calclear:()=>{ui.calSel=null;render();announceDay()},
   sortmenu:()=>menuTo('sort'),
   clearfilters:()=>{ui.filter='all';ui.q='';ui.hidden.clear();$('#q').value='';render()},
   delete:t=>{if(!t.dataset.armed){t.dataset.armed='1';t.textContent='Confirm delete';return}const name=draft.it.name;state.items=state.items.filter(i=>i.id!==draft.it.id);save();closeDrawer();render();toast(`Deleted ${name}.`)},
@@ -1211,7 +1176,10 @@ document.addEventListener('click',e=>{
   if(D.filter){ui.filter=D.filter;ui.menu=null;render();return}
   if(D.group){const g=D.group;ui.hidden.has(g)?ui.hidden.delete(g):ui.hidden.add(g);render();return}
   if(D.sortkey){ui.sort=D.sortkey;ui.menu=null;render();return}
-  if(D.day){ui.calSel=ui.calSel===D.day?null:D.day;render();return}
+  if(D.day){const d=parse(D.day);ui.calFocus=D.day;
+    if(d.getMonth()!==ui.cal.getMonth()||d.getFullYear()!==ui.cal.getFullYear()){ui.cal=new Date(d.getFullYear(),d.getMonth(),1);ui.calSel=D.day}
+    else ui.calSel=ui.calSel===D.day?null:D.day;
+    render();announceDay();return}
   if(D.agenda){const it=state.items.find(i=>i.id===D.agenda);if(it){ui.view='timeline';focusRow(it)}return}
   if(D.tpl){const v=D.tpl;closeModal();openDrawer(null,v==='blank'?{}:TEMPLATES[+v]);return}
   if(D.collapse){const g=D.collapse;ui.collapsed.has(g)?ui.collapsed.delete(g):ui.collapsed.add(g);render();return}
@@ -1256,9 +1224,10 @@ document.addEventListener('keydown',e=>{
   if(e.target.classList&&e.target.classList.contains('day')&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(e.key)){
     e.preventDefault();const d=parse(e.target.dataset.day);
     const nd=e.key==='Home'?addDays(d,-((d.getDay()+6)%7)):e.key==='End'?addDays(d,6-((d.getDay()+6)%7)):addDays(d,{ArrowLeft:-1,ArrowRight:1,ArrowUp:-7,ArrowDown:7}[e.key]);
-    const k=iso(nd);let el=document.querySelector(`[data-day="${k}"]`);
-    if(!el||el.classList.contains('out')){ui.cal=new Date(nd.getFullYear(),nd.getMonth(),1);ui.calSel=null;render();el=document.querySelector(`[data-day="${k}"]`)}
-    if(el){document.querySelectorAll('.day').forEach(b=>b.tabIndex=-1);el.tabIndex=0;el.focus()}return}
+    const k=iso(nd);ui.calFocus=k;
+    if(nd.getMonth()!==ui.cal.getMonth()||nd.getFullYear()!==ui.cal.getFullYear()){ui.cal=new Date(nd.getFullYear(),nd.getMonth(),1);render()}
+    else document.querySelectorAll('.day').forEach(b=>b.tabIndex=b.dataset.day===k?0:-1);
+    const el=document.querySelector(`[data-day="${k}"]`);if(el)el.focus();return}
 });
 ['modal','drawer'].forEach(id=>$('#'+id).addEventListener('cancel',e=>{e.preventDefault();if(id==='modal')closeModal();else closeDrawer()}));
 try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
